@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="fr" class="h-full">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lipidomics Dashboard</title>
@@ -12,14 +12,14 @@
     * { font-family: 'Inter', sans-serif; }
     
     :root {
-      --primary: #E8D5F2;
-      --accent: #A8D8EA;
-      --success: #C1F0D4;
-      --warning: #FEE8D1;
-      --danger: #F7D1D1;
-      --neutral: #E9E5E0;
-      --text-dark: #5A5A5A;
-      --text-light: #8B8B8B;
+      --primary: #C026D3;      /* plus saturé */
+      --accent: #0284C7;        /* plus saturé */
+      --success: #059669;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --neutral: #9CA3AF;
+      --text-dark: #111827;     /* plus foncé */
+      --text-light: #4B5563;     /* plus contrasté */
     }
     
     .accordion-content {
@@ -43,24 +43,24 @@
     
     .range-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: white;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(168, 216, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       border: 2px solid var(--accent);
       transition: all 0.3s ease;
     }
     
     .range-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-      box-shadow: 0 6px 16px rgba(168, 216, 234, 0.6);
+      transform: scale(1.2);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
     }
     
     .tooltip {
       position: absolute;
-      background: rgba(90, 90, 90, 0.95);
+      background: #1f2937;
       color: white;
       padding: 8px 12px;
       border-radius: 6px;
@@ -71,6 +71,7 @@
       transform: translate(-50%, -100%);
       margin-top: -10px;
       backdrop-filter: blur(4px);
+      font-weight: 500;
     }
     
     .tooltip::after {
@@ -81,7 +82,7 @@
       margin-left: -5px;
       border-width: 5px;
       border-style: solid;
-      border-color: rgba(90, 90, 90, 0.95) transparent transparent transparent;
+      border-color: #1f2937 transparent transparent transparent;
     }
     
     .tab-btn {
@@ -114,13 +115,13 @@
     .card {
       background: white;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid rgba(232, 213, 242, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0,0,0,0.05);
       transition: all 0.3s ease;
     }
     
     .card:hover {
-      box-shadow: 0 8px 28px rgba(168, 216, 234, 0.15);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.12);
       transform: translateY(-2px);
     }
     
@@ -131,7 +132,7 @@
     }
     
     select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23A8D8EA'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230284C7'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 8px center;
       background-size: 16px;
@@ -139,8 +140,8 @@
     }
     
     select:focus {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23A8D8EA'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-      box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.2);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(2,132,199,0.25);
     }
     
     input[type="text"], input[type="number"] {
@@ -148,7 +149,7 @@
     }
     
     input[type="text"]:focus, input[type="number"]:focus {
-      box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.2);
+      box-shadow: 0 0 0 3px rgba(2,132,199,0.25);
       border-color: var(--accent);
     }
     
@@ -161,7 +162,7 @@
     }
     
     .bar-segment:hover {
-      filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+      filter: brightness(1.2) drop-shadow(0 4px 8px rgba(0,0,0,0.15));
     }
     
     .pie-segment {
@@ -169,7 +170,7 @@
     }
     
     .pie-segment:hover {
-      filter: brightness(1.12) drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+      filter: brightness(1.2) drop-shadow(0 2px 6px rgba(0,0,0,0.2));
     }
     
     .tab-content {
@@ -192,506 +193,901 @@
     }
     
     .loading { animation: pulse 1.5s ease-in-out infinite; }
+    
+    /* Contraste accru pour les textes */
+    .text-gray-400 { color: #6B7280; }
+    .text-gray-500 { color: #4B5563; }
+    .text-gray-600 { color: #374151; }
+    .text-gray-700 { color: #1F2937; }
   </style>
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full bg-gradient-to-br from-blue-50 to-purple-50 overflow-auto">
-  <div class="flex h-full min-h-full">
-   <!-- Sidebar -->
-   <aside class="w-1/4 min-w-[280px] max-w-[350px] bg-white border-r border-purple-100 flex flex-col h-full overflow-y-auto">
-    <div class="p-4 border-b border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50">
-     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 bg-gradient-to-br from-purple-300 to-blue-300 rounded-xl flex items-center justify-center shadow-lg">
-       <i class="fas fa-flask text-white"></i>
+</head>
+<body class="h-full bg-gradient-to-br from-blue-100 to-purple-100 overflow-auto">
+<div class="flex h-full min-h-full"><!-- Sidebar -->
+  <aside class="w-1/4 min-w-[280px] max-w-[350px] bg-white border-r border-purple-200 flex flex-col h-full overflow-y-auto">
+    <div class="p-4 border-b border-purple-200 bg-gradient-to-br from-purple-100 to-blue-100">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-blue-400 rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-flask text-white"></i>
+        </div>
+        <div>
+          <h1 id="dashboard-title" class="text-lg font-bold text-gray-800">LipidoScope</h1>
+          <p id="sidebar-subtitle" class="text-xs text-gray-600">Analyse lipidomique</p>
+        </div>
       </div>
-      <div>
-       <h1 id="dashboard-title" class="text-lg font-bold text-gray-700">LipidoScope</h1>
-       <p class="text-xs text-gray-400">Analyse lipidomique</p>
-      </div>
-     </div>
     </div>
-    <div class="flex-1 overflow-y-auto p-3 space-y-2">
-     <!-- Section 1: Échantillons et groupes -->
-     <div class="accordion-section">
-      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
-       <div class="flex items-center gap-2">
-        <i class="fas fa-vials text-purple-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Échantillons et groupes</span>
-       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
-      <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-purple-100">
-       <div>
-        <label class="text-xs font-semibold text-gray-600 mb-2 block uppercase tracking-wide">Sélection des échantillons</label>
-        <div class="space-y-2">
-         <label class="flex items-center gap-2 cursor-pointer hover:bg-purple-50 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-700">Sample A</span> <span class="ml-auto text-xs px-2 py-0.5 bg-purple-100 text-purple-600 rounded-full font-medium">n=12</span> </label> <label class="flex items-center gap-2 cursor-pointer hover:bg-blue-50 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-700">Sample B</span> <span class="ml-auto text-xs px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full font-medium">n=12</span> </label> <label class="flex items-center gap-2 cursor-pointer hover:bg-teal-50 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-700">QC</span> <span class="ml-auto text-xs px-2 py-0.5 bg-teal-100 text-teal-600 rounded-full font-medium">n=6</span> </label>
+    <div class="flex-1 overflow-y-auto p-3 space-y-2"><!-- Section 1: Échantillons et groupes -->
+      <div class="accordion-section"><button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+        <div class="flex items-center gap-2"><i class="fas fa-vials text-purple-400 w-5"></i> <span class="font-medium text-gray-800 text-sm" id="samples-groups">Échantillons et groupes</span>
+        </div><i class="fas fa-chevron-down text-gray-500 text-xs accordion-icon transition-transform"></i> </button>
+        <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-purple-200">
+          <div><label class="text-xs font-semibold text-gray-700 mb-2 block uppercase tracking-wide" id="sample-selection">Sélection des échantillons</label>
+            <div class="space-y-2"><label class="flex items-center gap-2 cursor-pointer hover:bg-purple-100 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-800">Sample A</span> <span class="ml-auto text-xs px-2 py-0.5 bg-purple-200 text-purple-800 rounded-full font-medium">n=12</span> </label> <label class="flex items-center gap-2 cursor-pointer hover:bg-blue-100 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-800">Sample B</span> <span class="ml-auto text-xs px-2 py-0.5 bg-blue-200 text-blue-800 rounded-full font-medium">n=12</span> </label> <label class="flex items-center gap-2 cursor-pointer hover:bg-teal-100 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-800">QC</span> <span class="ml-auto text-xs px-2 py-0.5 bg-teal-200 text-teal-800 rounded-full font-medium">n=6</span> </label>
+            </div>
+          </div>
+          <div class="border-t border-purple-200 pt-3"><label class="text-xs font-semibold text-gray-700 mb-2 block uppercase tracking-wide" id="group-comparison">Comparaison de groupes</label>
+            <div class="grid grid-cols-2 gap-2"><select class="w-full p-2 text-sm border border-purple-300 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300 focus:border-purple-300" id="group1-select"> <option>Groupe 1</option> <option>Sample A</option> <option>Sample B</option> <option>QC</option> </select> <select class="w-full p-2 text-sm border border-purple-300 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300 focus:border-purple-300" id="group2-select"> <option>Groupe 2</option> <option>Sample A</option> <option>Sample B</option> <option>QC</option> </select>
+            </div>
+          </div>
         </div>
-       </div>
-       <div class="border-t border-purple-100 pt-3">
-        <label class="text-xs font-semibold text-gray-600 mb-2 block uppercase tracking-wide">Comparaison de groupes</label>
-        <div class="grid grid-cols-2 gap-2">
-         <select class="w-full p-2 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300 focus:border-purple-300"> <option>Groupe 1</option> <option>Sample A</option> <option>Sample B</option> <option>QC</option> </select> <select class="w-full p-2 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300 focus:border-purple-300"> <option>Groupe 2</option> <option>Sample A</option> <option>Sample B</option> <option>QC</option> </select>
+      </div><!-- Section 2: Filtres lipidiques -->
+      <div class="accordion-section"><button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+        <div class="flex items-center gap-2"><i class="fas fa-filter text-blue-400 w-5"></i> <span class="font-medium text-gray-800 text-sm" id="lipid-filters">Filtres lipidiques</span>
+        </div><i class="fas fa-chevron-down text-gray-500 text-xs accordion-icon transition-transform"></i> </button>
+        <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-blue-200">
+          <div><label class="text-xs font-semibold text-gray-700 mb-1.5 block uppercase tracking-wide" id="category-label">Catégorie</label> <select id="category-select" class="w-full p-2 text-sm border border-blue-300 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300" onchange="updateClasses()"> <option value="all" id="cat-all">Toutes les catégories</option> <option value="glycerolipids">Glycerolipids</option> <option value="glycerophospholipids">Glycerophospholipids</option> <option value="sphingolipids">Sphingolipids</option> <option value="sterol">Sterol Lipids</option> <option value="fatty">Fatty Acyls</option> </select>
+          </div>
+          <div><label class="text-xs font-semibold text-gray-700 mb-1.5 block uppercase tracking-wide" id="class-label">Classe</label> <select id="class-select" class="w-full p-2 text-sm border border-blue-300 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300"> <option value="all" id="class-all">Toutes les classes</option> <option>PC</option> <option>PE</option> <option>PS</option> <option>PI</option> <option>DG</option> <option>TG</option> <option>Cer</option> <option>SM</option> </select>
+          </div>
+          <div><label class="text-xs font-semibold text-gray-700 mb-1.5 block uppercase tracking-wide" id="bond-type-label">Type de liaison</label> <select class="w-full p-2 text-sm border border-blue-300 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300" id="bond-select"> <option value="all" id="bond-all">Tous les types</option> <option>Ester</option> <option>Ether</option> <option>Amide</option> </select>
+          </div>
         </div>
-       </div>
+      </div><!-- Section 3: Propriétés globales -->
+      <div class="accordion-section"><button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+        <div class="flex items-center gap-2"><i class="fas fa-sliders-h text-emerald-400 w-5"></i> <span class="font-medium text-gray-800 text-sm" id="global-properties">Propriétés globales</span>
+        </div><i class="fas fa-chevron-down text-gray-500 text-xs accordion-icon transition-transform"></i> </button>
+        <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-4 border border-emerald-200">
+          <div>
+            <div class="flex justify-between items-center mb-2"><label class="text-xs font-semibold text-gray-700 uppercase tracking-wide" id="total-carbons">Carbones totaux</label> <span class="text-xs text-purple-600 font-bold" id="carbon-value">10 - 60</span>
+            </div>
+            <div class="flex gap-2 items-center"><input type="range" min="10" max="60" value="10" class="range-slider flex-1" id="carbon-min" oninput="updateRangeDisplay('carbon')"> <input type="range" min="10" max="60" value="60" class="range-slider flex-1" id="carbon-max" oninput="updateRangeDisplay('carbon')">
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2"><label class="text-xs font-semibold text-gray-700 uppercase tracking-wide" id="total-unsaturations">Insaturations totales</label> <span class="text-xs text-purple-600 font-bold" id="unsat-value">0 - 10</span>
+            </div>
+            <div class="flex gap-2 items-center"><input type="range" min="0" max="10" value="0" class="range-slider flex-1" id="unsat-min" oninput="updateRangeDisplay('unsat')"> <input type="range" min="0" max="10" value="10" class="range-slider flex-1" id="unsat-max" oninput="updateRangeDisplay('unsat')">
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2"><label class="text-xs font-semibold text-gray-700 uppercase tracking-wide" id="oxygen-label">Oxygène</label> <span class="text-xs text-purple-600 font-bold" id="oxygen-value">0 - 5</span>
+            </div>
+            <div class="flex gap-2 items-center"><input type="range" min="0" max="5" value="0" class="range-slider flex-1" id="oxygen-min" oninput="updateRangeDisplay('oxygen')"> <input type="range" min="0" max="5" value="5" class="range-slider flex-1" id="oxygen-max" oninput="updateRangeDisplay('oxygen')">
+            </div>
+          </div>
+        </div>
+      </div><!-- Section 4: Filtres par chaîne -->
+      <div class="accordion-section"><button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+        <div class="flex items-center gap-2"><i class="fas fa-link text-orange-400 w-5"></i> <span class="font-medium text-gray-800 text-sm" id="chain-filters">Filtres par chaîne</span>
+        </div><i class="fas fa-chevron-down text-gray-500 text-xs accordion-icon transition-transform"></i> </button>
+        <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-orange-200">
+          <div class="grid grid-cols-3 gap-2">
+            <div><label class="text-xs font-semibold text-gray-700 mb-1 block uppercase tracking-wide" id="sn1-label">sn1</label> <select class="w-full p-2 text-xs border border-orange-300 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300" id="sn1-select"> <option id="sn1-all">Tous</option> <option>16:0</option> <option>18:0</option> <option>18:1</option> <option>18:2</option> </select>
+            </div>
+            <div><label class="text-xs font-semibold text-gray-700 mb-1 block uppercase tracking-wide" id="sn2-label">sn2</label> <select class="w-full p-2 text-xs border border-orange-300 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300" id="sn2-select"> <option id="sn2-all">Tous</option> <option>16:0</option> <option>18:1</option> <option>18:2</option> <option>20:4</option> </select>
+            </div>
+            <div><label class="text-xs font-semibold text-gray-700 mb-1 block uppercase tracking-wide" id="sn3-label">sn3</label> <select class="w-full p-2 text-xs border border-orange-300 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300" id="sn3-select"> <option id="sn3-all">Tous</option> <option>16:0</option> <option>18:0</option> <option>22:6</option> </select>
+            </div>
+          </div>
+          <div class="border-t border-orange-200 pt-3">
+            <p class="text-xs text-gray-600 italic" id="chain-advanced">Filtres avancés par chaîne disponibles en mode expert</p>
+          </div>
+        </div>
+      </div><!-- Section 5: Filtres sur les valeurs -->
+      <div class="accordion-section"><button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+        <div class="flex items-center gap-2"><i class="fas fa-chart-line text-rose-400 w-5"></i> <span class="font-medium text-gray-800 text-sm" id="value-filters">Filtres sur les valeurs</span>
+        </div><i class="fas fa-chevron-down text-gray-500 text-xs accordion-icon transition-transform"></i> </button>
+        <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-rose-200">
+          <div><label class="text-xs font-semibold text-gray-700 mb-1.5 block uppercase tracking-wide" id="pmol-threshold">Seuil pmol</label>
+            <div class="grid grid-cols-2 gap-2"><input type="number" placeholder="Min" class="w-full p-2 text-sm border border-rose-300 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="0" id="pmol-min"> <input type="number" placeholder="Max" class="w-full p-2 text-sm border border-rose-300 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="10000" id="pmol-max">
+            </div>
+          </div>
+          <div><label class="text-xs font-semibold text-gray-700 mb-1.5 block uppercase tracking-wide" id="mol-threshold">Seuil mol%</label>
+            <div class="grid grid-cols-2 gap-2"><input type="number" placeholder="Min" class="w-full p-2 text-sm border border-rose-300 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="0" step="0.1" id="mol-min"> <input type="number" placeholder="Max" class="w-full p-2 text-sm border border-rose-300 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="100" step="0.1" id="mol-max">
+            </div>
+          </div>
+        </div>
+      </div><!-- Section 6: Recherche textuelle -->
+      <div class="accordion-section"><button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+        <div class="flex items-center gap-2"><i class="fas fa-search text-indigo-400 w-5"></i> <span class="font-medium text-gray-800 text-sm" id="text-search">Recherche textuelle</span>
+        </div><i class="fas fa-chevron-down text-gray-500 text-xs accordion-icon transition-transform"></i> </button>
+        <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 border border-indigo-200">
+          <div class="relative"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i> <input type="text" placeholder="Rechercher un lipide..." class="w-full pl-10 pr-4 py-2.5 text-sm border border-indigo-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300" id="search-input">
+          </div>
+        </div>
       </div>
-     </div><!-- Section 2: Filtres lipidiques -->
-     <div class="accordion-section">
-      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
-       <div class="flex items-center gap-2">
-        <i class="fas fa-filter text-blue-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Filtres lipidiques</span>
-       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
-      <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-blue-100">
-       <div>
-        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Catégorie</label> <select id="category-select" class="w-full p-2 text-sm border border-blue-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300" onchange="updateClasses()"> <option value="all">Toutes les catégories</option> <option value="glycerolipids">Glycerolipids</option> <option value="glycerophospholipids">Glycerophospholipids</option> <option value="sphingolipids">Sphingolipids</option> <option value="sterol">Sterol Lipids</option> <option value="fatty">Fatty Acyls</option> </select>
-       </div>
-       <div>
-        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Classe</label> <select id="class-select" class="w-full p-2 text-sm border border-blue-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300"> <option value="all">Toutes les classes</option> <option>PC</option> <option>PE</option> <option>PS</option> <option>PI</option> <option>DG</option> <option>TG</option> <option>Cer</option> <option>SM</option> </select>
-       </div>
-       <div>
-        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Type de liaison</label> <select class="w-full p-2 text-sm border border-blue-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300"> <option value="all">Tous les types</option> <option>Ester</option> <option>Ether</option> <option>Amide</option> </select>
-       </div>
-      </div>
-     </div><!-- Section 3: Propriétés globales -->
-     <div class="accordion-section">
-      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
-       <div class="flex items-center gap-2">
-        <i class="fas fa-sliders-h text-emerald-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Propriétés globales</span>
-       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
-      <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-4 border border-emerald-100">
-       <div>
-        <div class="flex justify-between items-center mb-2">
-         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Carbones totaux</label> <span class="text-xs text-purple-500 font-bold" id="carbon-value">10 - 60</span>
-        </div>
-        <div class="flex gap-2 items-center">
-         <input type="range" min="10" max="60" value="10" class="range-slider flex-1" id="carbon-min" oninput="updateRangeDisplay('carbon')"> <input type="range" min="10" max="60" value="60" class="range-slider flex-1" id="carbon-max" oninput="updateRangeDisplay('carbon')">
-        </div>
-       </div>
-       <div>
-        <div class="flex justify-between items-center mb-2">
-         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Insaturations totales</label> <span class="text-xs text-purple-500 font-bold" id="unsat-value">0 - 10</span>
-        </div>
-        <div class="flex gap-2 items-center">
-         <input type="range" min="0" max="10" value="0" class="range-slider flex-1" id="unsat-min" oninput="updateRangeDisplay('unsat')"> <input type="range" min="0" max="10" value="10" class="range-slider flex-1" id="unsat-max" oninput="updateRangeDisplay('unsat')">
-        </div>
-       </div>
-       <div>
-        <div class="flex justify-between items-center mb-2">
-         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Oxygène</label> <span class="text-xs text-purple-500 font-bold" id="oxygen-value">0 - 5</span>
-        </div>
-        <div class="flex gap-2 items-center">
-         <input type="range" min="0" max="5" value="0" class="range-slider flex-1" id="oxygen-min" oninput="updateRangeDisplay('oxygen')"> <input type="range" min="0" max="5" value="5" class="range-slider flex-1" id="oxygen-max" oninput="updateRangeDisplay('oxygen')">
-        </div>
-       </div>
-      </div>
-     </div><!-- Section 4: Filtres par chaîne -->
-     <div class="accordion-section">
-      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
-       <div class="flex items-center gap-2">
-        <i class="fas fa-link text-orange-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Filtres par chaîne</span>
-       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
-      <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-orange-100">
-       <div class="grid grid-cols-3 gap-2">
-        <div>
-         <label class="text-xs font-semibold text-gray-600 mb-1 block uppercase tracking-wide">sn1</label> <select class="w-full p-2 text-xs border border-orange-200 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300"> <option>Tous</option> <option>16:0</option> <option>18:0</option> <option>18:1</option> <option>18:2</option> </select>
-        </div>
-        <div>
-         <label class="text-xs font-semibold text-gray-600 mb-1 block uppercase tracking-wide">sn2</label> <select class="w-full p-2 text-xs border border-orange-200 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300"> <option>Tous</option> <option>16:0</option> <option>18:1</option> <option>18:2</option> <option>20:4</option> </select>
-        </div>
-        <div>
-         <label class="text-xs font-semibold text-gray-600 mb-1 block uppercase tracking-wide">sn3</label> <select class="w-full p-2 text-xs border border-orange-200 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300"> <option>Tous</option> <option>16:0</option> <option>18:0</option> <option>22:6</option> </select>
-        </div>
-       </div>
-       <div class="border-t border-orange-100 pt-3">
-        <p class="text-xs text-gray-400 italic">Filtres avancés par chaîne disponibles en mode expert</p>
-       </div>
-      </div>
-     </div><!-- Section 5: Filtres sur les valeurs -->
-     <div class="accordion-section">
-      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
-       <div class="flex items-center gap-2">
-        <i class="fas fa-chart-line text-rose-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Filtres sur les valeurs</span>
-       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
-      <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-rose-100">
-       <div>
-        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Seuil pmol</label>
-        <div class="grid grid-cols-2 gap-2">
-         <input type="number" placeholder="Min" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="0"> <input type="number" placeholder="Max" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="10000">
-        </div>
-       </div>
-       <div>
-        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Seuil mol%</label>
-        <div class="grid grid-cols-2 gap-2">
-         <input type="number" placeholder="Min" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="0" step="0.1"> <input type="number" placeholder="Max" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="100" step="0.1">
-        </div>
-       </div>
-      </div>
-     </div><!-- Section 6: Recherche textuelle -->
-     <div class="accordion-section">
-      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
-       <div class="flex items-center gap-2">
-        <i class="fas fa-search text-indigo-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Recherche textuelle</span>
-       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
-      <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 border border-indigo-100">
-       <div class="relative">
-        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-sm"></i> <input type="text" placeholder="Rechercher un lipide..." class="w-full pl-10 pr-4 py-2.5 text-sm border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300">
-       </div>
-      </div>
-     </div>
     </div><!-- Boutons d'action -->
-    <div class="p-3 border-t border-purple-100 bg-gradient-to-r from-purple-50 to-blue-50 space-y-2">
-     <button class="w-full py-2.5 bg-gradient-to-r from-purple-300 to-blue-300 hover:from-purple-400 hover:to-blue-400 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"> <i class="fas fa-check"></i> Appliquer les filtres </button> <button class="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"> <i class="fas fa-redo"></i> Réinitialiser </button>
+    <div class="p-3 border-t border-purple-200 bg-gradient-to-r from-purple-100 to-blue-100 space-y-2"><button class="w-full py-2.5 bg-gradient-to-r from-purple-400 to-blue-400 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2" id="apply-filters-btn"> <i class="fas fa-check"></i> <span id="apply-filters">Appliquer les filtres</span> </button> <button class="w-full py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors flex items-center justify-center gap-2" id="reset-btn"> <i class="fas fa-redo"></i> <span id="reset">Réinitialiser</span> </button>
     </div>
-   </aside><!-- Main Content -->
-   <main class="flex-1 flex flex-col h-full overflow-hidden">
-    <!-- Header avec onglets -->
-    <header class="bg-white border-b border-purple-100 px-6 py-0 shadow-sm">
-     <nav class="flex items-center gap-2">
-      <button class="tab-btn tab-active px-5 py-4 text-sm font-medium transition-all flex items-center gap-2 text-purple-400" data-tab="accueil" onclick="switchTab('accueil', event)"> <i class="fas fa-home"></i> Accueil </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="explorateur" onclick="switchTab('explorateur', event)"> <i class="fas fa-search"></i> Explorateur </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="statistiques" onclick="switchTab('statistiques', event)"> <i class="fas fa-chart-bar"></i> Statistiques </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="multivarie" onclick="switchTab('multivarie', event)"> <i class="fas fa-cube"></i> Multivarié </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="clustering" onclick="switchTab('clustering', event)"> <i class="fas fa-sitemap"></i> Clustering </button>
-     </nav>
+  </aside><!-- Main Content -->
+  <main class="flex-1 flex flex-col h-full overflow-hidden"><!-- Header avec onglets -->
+    <header class="bg-white border-b border-purple-300 px-6 py-0 shadow-sm relative"><!-- Language Toggle -->
+      <div class="absolute top-4 right-6 flex gap-2 z-50"><button id="lang-fr" class="px-3 py-1.5 rounded-lg font-semibold text-sm transition-all lang-btn lang-active" style="background: #C026D3; color: white;">🇫🇷 FR</button> <button id="lang-en" class="px-3 py-1.5 rounded-lg font-semibold text-sm transition-all lang-btn hover:bg-gray-200" style="color: #374151;">🇬🇧 EN</button>
+      </div>
+      <nav class="flex items-center gap-2"><button class="tab-btn tab-active px-5 py-4 text-sm font-medium transition-all flex items-center gap-2 text-purple-500" data-tab="accueil" onclick="switchTab('accueil', event)"> <i class="fas fa-home"></i> <span id="tab-home">Accueil</span> </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2" data-tab="explorateur" onclick="switchTab('explorateur', event)"> <i class="fas fa-search"></i> <span id="tab-explorer">Explorateur</span> </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2" data-tab="statistiques" onclick="switchTab('statistiques', event)"> <i class="fas fa-chart-bar"></i> <span id="tab-statistics">Statistiques</span> </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2" data-tab="multivarie" onclick="switchTab('multivarie', event)"> <i class="fas fa-cube"></i> <span id="tab-multivariate">Multivarié</span> </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2" data-tab="clustering" onclick="switchTab('clustering', event)"> <i class="fas fa-sitemap"></i> <span id="tab-clustering">Clustering</span> </button>
+      </nav>
     </header><!-- Contenu principal -->
-    <div class="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50">
-     <!-- TAB: Accueil -->
-     <div id="tab-accueil" class="tab-content active">
-      <!-- Titre de la section -->
-      <div class="flex items-center justify-between mb-6">
-       <div>
-        <h2 id="overview-title" class="text-2xl font-bold text-gray-700">Vue d'ensemble des classes lipidiques</h2>
-        <p class="text-sm text-gray-500 mt-1">Analyse comparative des profils lipidiques</p>
-       </div>
-       <div class="flex items-center gap-2">
-        <span class="text-xs text-gray-400">Dernière mise à jour: 15/01/2025</span> <button class="p-2 hover:bg-white rounded-lg transition-colors" title="Actualiser"> <i class="fas fa-sync-alt text-gray-400"></i> </button>
-       </div>
-      </div><!-- Graphique en barres empilées -->
-      <div class="card p-5 mb-6">
-       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-semibold text-gray-700">Composition en classes lipidiques</h3><button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-400"></i> </button>
-       </div>
-       <div class="flex">
-        <!-- Zone du graphique -->
-        <div class="flex-1">
-         <div class="flex items-end justify-around h-64 px-4" id="bar-chart">
-          <!-- Sample A -->
-          <div class="flex flex-col items-center group">
-           <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="Sample A">
-            <div class="bg-purple-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 28%" data-class="PC" data-value="28"></div>
-            <div class="bg-blue-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 22%" data-class="PE" data-value="22"></div>
-            <div class="bg-emerald-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 15%" data-class="PS" data-value="15"></div>
-            <div class="bg-rose-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 12%" data-class="SM" data-value="12"></div>
-            <div class="bg-amber-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 10%" data-class="Cer" data-value="10"></div>
-            <div class="bg-pink-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 8%" data-class="PI" data-value="8"></div>
-            <div class="bg-gray-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 5%" data-class="Autres" data-value="5"></div>
-           </div><span class="mt-2 text-sm font-medium text-gray-600">Sample A</span>
-          </div><!-- Sample B -->
-          <div class="flex flex-col items-center group">
-           <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="Sample B">
-            <div class="bg-purple-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 32%" data-class="PC" data-value="32"></div>
-            <div class="bg-blue-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 20%" data-class="PE" data-value="20"></div>
-            <div class="bg-emerald-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 14%" data-class="PS" data-value="14"></div>
-            <div class="bg-rose-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 14%" data-class="SM" data-value="14"></div>
-            <div class="bg-amber-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 8%" data-class="Cer" data-value="8"></div>
-            <div class="bg-pink-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 7%" data-class="PI" data-value="7"></div>
-            <div class="bg-gray-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 5%" data-class="Autres" data-value="5"></div>
-           </div><span class="mt-2 text-sm font-medium text-gray-600">Sample B</span>
-          </div><!-- QC -->
-          <div class="flex flex-col items-center group">
-           <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="QC">
-            <div class="bg-purple-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 30%" data-class="PC" data-value="30"></div>
-            <div class="bg-blue-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 21%" data-class="PE" data-value="21"></div>
-            <div class="bg-emerald-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 16%" data-class="PS" data-value="16"></div>
-            <div class="bg-rose-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 13%" data-class="SM" data-value="13"></div>
-            <div class="bg-amber-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 9%" data-class="Cer" data-value="9"></div>
-            <div class="bg-pink-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 7%" data-class="PI" data-value="7"></div>
-            <div class="bg-gray-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 4%" data-class="Autres" data-value="4"></div>
-           </div><span class="mt-2 text-sm font-medium text-gray-600">QC</span>
+    <div class="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-blue-100 to-purple-100"><!-- TAB: Accueil -->
+      <div id="tab-accueil" class="tab-content active"><!-- Titre de la section -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 id="overview-title" class="text-2xl font-bold text-gray-800">Vue d'ensemble des classes lipidiques</h2>
+            <p id="overview-subtitle" class="text-sm text-gray-600 mt-1">Analyse comparative des profils lipidiques</p>
           </div>
-         </div><!-- Axe Y -->
-         <div class="absolute left-0 h-56 flex flex-col justify-between text-xs text-gray-400 py-1" style="margin-left: -30px; margin-top: -230px;">
-          <span>100%</span> <span>75%</span> <span>50%</span> <span>25%</span> <span>0%</span>
-         </div>
-        </div><!-- Légende -->
-        <div class="ml-8 flex flex-col justify-center gap-2">
-         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-purple-200"></div><span class="text-sm text-gray-600">PC</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-blue-200"></div><span class="text-sm text-gray-600">PE</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-emerald-200"></div><span class="text-sm text-gray-600">PS</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-rose-200"></div><span class="text-sm text-gray-600">SM</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-amber-200"></div><span class="text-sm text-gray-600">Cer</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-pink-200"></div><span class="text-sm text-gray-600">PI</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-gray-200"></div><span class="text-sm text-gray-600">Autres</span>
-         </div>
-        </div>
-       </div>
-      </div><!-- Zone inférieure: Camembert + Tableau -->
-      <div class="grid grid-cols-2 gap-6">
-       <!-- Camembert -->
-       <div class="card p-5">
-        <div class="flex items-center justify-between mb-4">
-         <div class="flex items-center gap-3">
-          <h3 class="font-semibold text-gray-700">Répartition par classe</h3><select id="pie-sample-select" class="p-1.5 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300" onchange="updatePieChart()"> <option value="sampleA">Sample A</option> <option value="sampleB">Sample B</option> <option value="qc">QC</option> </select>
-         </div><button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-400"></i> </button>
-        </div>
-        <div class="flex items-center justify-center">
-         <svg id="pie-chart" width="240" height="240" viewbox="0 0 240 240">
-          <!-- Camembert interactif --> <g transform="translate(120, 120)">
-           <!-- PC - 28% -->
-           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 0 -100 A 100 100 0 0 1 95.11 -30.90 L 0 0 Z" fill="#D8B4F8" data-class="PC" data-value="28" /> <!-- PE - 22% -->
-           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 95.11 -30.90 A 100 100 0 0 1 80.90 58.78 L 0 0 Z" fill="#BFDBFE" data-class="PE" data-value="22" /> <!-- PS - 15% -->
-           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 80.90 58.78 A 100 100 0 0 1 -30.90 95.11 L 0 0 Z" fill="#A7F3D0" data-class="PS" data-value="15" /> <!-- SM - 12% -->
-           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -30.90 95.11 A 100 100 0 0 1 -80.90 -58.78 L 0 0 Z" fill="#FBCFE8" data-class="SM" data-value="12" /> <!-- Cer - 10% -->
-           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -80.90 -58.78 A 100 100 0 0 1 -58.78 -80.90 L 0 0 Z" fill="#FED7AA" data-class="Cer" data-value="10" /> <!-- PI - 8% -->
-           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -58.78 -80.90 A 100 100 0 0 1 -30.90 -95.11 L 0 0 Z" fill="#F8BBD0" data-class="PI" data-value="8" /> <!-- Autres - 5% -->
-           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -30.90 -95.11 A 100 100 0 0 1 0 -100 L 0 0 Z" fill="#D1D5DB" data-class="Autres" data-value="5" />
-          </g> <!-- Centre blanc --> <circle cx="120" cy="120" r="50" fill="white" /> <text x="120" y="115" text-anchor="middle" class="text-sm font-medium fill-gray-500">
-           Total
-          </text> <text x="120" y="135" text-anchor="middle" class="text-lg font-bold fill-purple-400">
-           3000
-          </text> <text x="120" y="150" text-anchor="middle" class="text-xs fill-gray-400">
-           pmol
-          </text>
-         </svg>
-        </div>
-        <p class="text-xs text-gray-400 text-center mt-3 flex items-center justify-center gap-1"><i class="fas fa-filter text-purple-300"></i> Cliquez sur une part pour filtrer</p>
-       </div><!-- Tableau récapitulatif -->
-       <div class="card p-5">
-        <div class="flex items-center justify-between mb-4">
-         <h3 class="font-semibold text-gray-700">Résumé quantitatif</h3><button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-400"></i> </button>
-        </div>
-        <div class="overflow-x-auto">
-         <table class="w-full">
-          <thead>
-           <tr class="border-b border-purple-100">
-            <th class="text-left py-3 px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Métrique</th>
-            <th class="text-center py-3 px-2 text-xs font-semibold text-purple-400 uppercase tracking-wider">Sample A</th>
-            <th class="text-center py-3 px-2 text-xs font-semibold text-blue-400 uppercase tracking-wider">Sample B</th>
-            <th class="text-center py-3 px-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider">QC</th>
-           </tr>
-          </thead>
-          <tbody class="divide-y divide-purple-50">
-           <tr class="hover:bg-purple-50 transition-colors">
-            <td class="py-3 px-2">
-             <div class="flex items-center gap-2">
-              <i class="fas fa-flask text-purple-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">Total lipides (pmol)</span>
-             </div></td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">3,000</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">3,300</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">4,400</td>
-           </tr>
-           <tr class="hover:bg-purple-50 transition-colors">
-            <td class="py-3 px-2">
-             <div class="flex items-center gap-2">
-              <i class="fas fa-list text-blue-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">Espèces détectées</span>
-             </div></td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">150</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">155</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">160</td>
-           </tr>
-           <tr class="hover:bg-purple-50 transition-colors">
-            <td class="py-3 px-2">
-             <div class="flex items-center gap-2">
-              <i class="fas fa-layer-group text-emerald-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">Classes identifiées</span>
-             </div></td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">12</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">13</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">14</td>
-           </tr>
-           <tr class="hover:bg-purple-50 transition-colors">
-            <td class="py-3 px-2">
-             <div class="flex items-center gap-2">
-              <i class="fas fa-percentage text-rose-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">CV moyen (%)</span>
-             </div></td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">8.2</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">7.8</td>
-            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">5.4</td>
-           </tr>
-          </tbody>
-         </table>
-        </div>
-        <div class="mt-4 pt-4 border-t border-purple-100">
-         <div class="flex items-center gap-2 text-xs text-gray-500">
-          <i class="fas fa-info-circle"></i> <span>CV = Coefficient de variation. Valeurs QC utilisées pour le contrôle qualité.</span>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div><!-- TAB: Explorateur -->
-     <div id="tab-explorateur" class="tab-content">
-      <div class="flex items-center justify-between mb-6">
-       <div>
-        <h2 class="text-2xl font-bold text-gray-700">Explorateur interactif</h2>
-        <p class="text-sm text-gray-500 mt-1">Naviguez et filtrez vos données lipidiques</p>
-       </div>
-      </div>
-      <div class="grid grid-cols-3 gap-6">
-       <div class="col-span-2 card p-6">
-        <h3 class="font-semibold text-gray-700 mb-4">Scatter plot: PC vs PE</h3>
-        <svg width="100%" height="300" viewbox="0 0 400 300" style="background: linear-gradient(to bottom, rgba(232,213,242,0.3), rgba(168,216,234,0.3));"><defs>
-          <lineargradient id="scatterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-           <stop offset="0%" style="stop-color:#D8B4F8;stop-opacity:0.8" />
-           <stop offset="100%" style="stop-color:#BFDBFE;stop-opacity:0.8" />
-          </lineargradient>
-         </defs> <!-- Grid --> <line x1="50" y1="280" x2="350" y2="280" stroke="#E5E7EB" stroke-width="2" /> <line x1="50" y1="30" x2="50" y2="280" stroke="#E5E7EB" stroke-width="2" /> <!-- Points Sample A --> <circle cx="120" cy="200" r="4" fill="#D8B4F8" opacity="0.7" class="hover:brightness-150" /> <circle cx="150" cy="180" r="4" fill="#D8B4F8" opacity="0.7" /> <circle cx="180" cy="160" r="4" fill="#D8B4F8" opacity="0.7" /> <circle cx="200" cy="140" r="4" fill="#D8B4F8" opacity="0.7" /> <!-- Points Sample B --> <circle cx="140" cy="210" r="4" fill="#BFDBFE" opacity="0.7" /> <circle cx="170" cy="170" r="4" fill="#BFDBFE" opacity="0.7" /> <circle cx="210" cy="130" r="4" fill="#BFDBFE" opacity="0.7" /> <circle cx="250" cy="100" r="4" fill="#BFDBFE" opacity="0.7" /> <!-- Points QC --> <circle cx="160" cy="190" r="4" fill="#A7F3D0" opacity="0.7" /> <circle cx="190" cy="150" r="4" fill="#A7F3D0" opacity="0.7" /> <circle cx="230" cy="110" r="4" fill="#A7F3D0" opacity="0.7" /> <!-- Labels --> <text x="25" y="285" font-size="12" fill="#8B7B8B">
-          PC (mol%)
-         </text> <text x="300" y="310" font-size="12" fill="#8B7B8B">
-          PE (mol%)
-         </text>
-        </svg>
-        <div class="flex gap-4 mt-4">
-         <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full" style="background: #D8B4F8;"></div><span class="text-xs text-gray-600">Sample A (n=12)</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full" style="background: #BFDBFE;"></div><span class="text-xs text-gray-600">Sample B (n=12)</span>
-         </div>
-         <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full" style="background: #A7F3D0;"></div><span class="text-xs text-gray-600">QC (n=6)</span>
-         </div>
-        </div>
-       </div>
-       <div class="card p-6">
-        <h3 class="font-semibold text-gray-700 mb-4">Filtres rapides</h3>
-        <div class="space-y-4">
-         <div><label class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block">Classe lipidique</label> <select class="w-full p-2 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8"> <option>PC</option> <option>PE</option> <option>PS</option> <option>SM</option> </select>
-         </div>
-         <div><label class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block">Nombre de carbones</label> <input type="range" min="10" max="50" value="30" class="w-full">
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-           <span>10</span><span id="carbon-display">30</span><span>50</span>
+          <div class="flex items-center gap-2"><span class="text-xs text-gray-500" id="last-update">Dernière mise à jour: 15/01/2025</span> <button class="p-2 hover:bg-white rounded-lg transition-colors" title="Actualiser"> <i class="fas fa-sync-alt text-gray-500"></i> </button>
           </div>
-         </div>
+        </div><!-- Graphique en barres empilées -->
+        <div class="card p-5 mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-gray-800" id="lipid-composition">Composition en classes lipidiques</h3><button class="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-500"></i> </button>
+          </div>
+          <div class="flex"><!-- Zone du graphique -->
+            <div class="flex-1 relative">
+              <div class="flex items-end justify-around h-64 px-4" id="bar-chart"><!-- Sample A -->
+                <div class="flex flex-col items-center group">
+                  <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="Sample A">
+                    <div class="bg-purple-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 28%" data-class="PC" data-value="28"></div>
+                    <div class="bg-blue-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 22%" data-class="PE" data-value="22"></div>
+                    <div class="bg-emerald-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 15%" data-class="PS" data-value="15"></div>
+                    <div class="bg-rose-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 12%" data-class="SM" data-value="12"></div>
+                    <div class="bg-amber-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 10%" data-class="Cer" data-value="10"></div>
+                    <div class="bg-pink-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 8%" data-class="PI" data-value="8"></div>
+                    <div class="bg-gray-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 5%" data-class="Autres" data-value="5"></div>
+                  </div><span class="mt-2 text-sm font-medium text-gray-700">Sample A</span>
+                </div><!-- Sample B -->
+                <div class="flex flex-col items-center group">
+                  <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="Sample B">
+                    <div class="bg-purple-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 32%" data-class="PC" data-value="32"></div>
+                    <div class="bg-blue-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 20%" data-class="PE" data-value="20"></div>
+                    <div class="bg-emerald-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 14%" data-class="PS" data-value="14"></div>
+                    <div class="bg-rose-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 14%" data-class="SM" data-value="14"></div>
+                    <div class="bg-amber-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 8%" data-class="Cer" data-value="8"></div>
+                    <div class="bg-pink-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 7%" data-class="PI" data-value="7"></div>
+                    <div class="bg-gray-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 5%" data-class="Autres" data-value="5"></div>
+                  </div><span class="mt-2 text-sm font-medium text-gray-700">Sample B</span>
+                </div><!-- QC -->
+                <div class="flex flex-col items-center group">
+                  <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="QC">
+                    <div class="bg-purple-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 30%" data-class="PC" data-value="30"></div>
+                    <div class="bg-blue-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 21%" data-class="PE" data-value="21"></div>
+                    <div class="bg-emerald-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 16%" data-class="PS" data-value="16"></div>
+                    <div class="bg-rose-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 13%" data-class="SM" data-value="13"></div>
+                    <div class="bg-amber-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 9%" data-class="Cer" data-value="9"></div>
+                    <div class="bg-pink-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 7%" data-class="PI" data-value="7"></div>
+                    <div class="bg-gray-300 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 4%" data-class="Autres" data-value="4"></div>
+                  </div><span class="mt-2 text-sm font-medium text-gray-700">QC</span>
+                </div>
+              </div><!-- Axe Y -->
+              <div class="absolute left-0 h-56 flex flex-col justify-between text-xs text-gray-500 py-1" style="margin-left: -30px; margin-top: -230px;"><span>100%</span> <span>75%</span> <span>50%</span> <span>25%</span> <span>0%</span>
+              </div>
+            </div><!-- Légende -->
+            <div class="ml-8 flex flex-col justify-center gap-2">
+              <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-purple-300"></div><span class="text-sm text-gray-700">PC</span></div>
+              <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-blue-300"></div><span class="text-sm text-gray-700">PE</span></div>
+              <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-emerald-300"></div><span class="text-sm text-gray-700">PS</span></div>
+              <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-rose-300"></div><span class="text-sm text-gray-700">SM</span></div>
+              <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-amber-300"></div><span class="text-sm text-gray-700">Cer</span></div>
+              <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-pink-300"></div><span class="text-sm text-gray-700">PI</span></div>
+              <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-gray-300"></div><span class="text-sm text-gray-700">Autres</span></div>
+            </div>
+          </div>
+        </div><!-- Zone inférieure: Camembert + Tableau -->
+        <div class="grid grid-cols-2 gap-6"><!-- Camembert -->
+          <div class="card p-5">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <h3 class="font-semibold text-gray-800" id="distribution-title">Répartition par classe</h3><select id="pie-sample-select" class="p-1.5 text-sm border border-purple-300 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300" onchange="updatePieChart()"> <option value="sampleA">Sample A</option> <option value="sampleB">Sample B</option> <option value="qc">QC</option> </select>
+              </div><button class="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-500"></i> </button>
+            </div>
+            <div class="flex items-center justify-center">
+              <svg id="pie-chart" width="240" height="240" viewbox="0 0 240 240"><!-- Camembert interactif --> <g transform="translate(120, 120)"><!-- PC - 28% -->
+                <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 0 -100 A 100 100 0 0 1 95.11 -30.90 L 0 0 Z" fill="#C084FC" data-class="PC" data-value="28" /> <!-- PE - 22% -->
+                <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 95.11 -30.90 A 100 100 0 0 1 80.90 58.78 L 0 0 Z" fill="#93C5FD" data-class="PE" data-value="22" /> <!-- PS - 15% -->
+                <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 80.90 58.78 A 100 100 0 0 1 -30.90 95.11 L 0 0 Z" fill="#6EE7B7" data-class="PS" data-value="15" /> <!-- SM - 12% -->
+                <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -30.90 95.11 A 100 100 0 0 1 -80.90 -58.78 L 0 0 Z" fill="#F9A8D4" data-class="SM" data-value="12" /> <!-- Cer - 10% -->
+                <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -80.90 -58.78 A 100 100 0 0 1 -58.78 -80.90 L 0 0 Z" fill="#FDBA74" data-class="Cer" data-value="10" /> <!-- PI - 8% -->
+                <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -58.78 -80.90 A 100 100 0 0 1 -30.90 -95.11 L 0 0 Z" fill="#F9A8D4" data-class="PI" data-value="8" /> <!-- Autres - 5% -->
+                <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -30.90 -95.11 A 100 100 0 0 1 0 -100 L 0 0 Z" fill="#9CA3AF" data-class="Autres" data-value="5" />
+              </g> <!-- Centre blanc --> <circle cx="120" cy="120" r="50" fill="white" /> <text x="120" y="115" text-anchor="middle" class="text-sm font-medium fill-gray-600">
+                Total
+              </text> <text x="120" y="135" text-anchor="middle" class="text-lg font-bold fill-purple-500">
+                3000
+              </text> <text x="120" y="150" text-anchor="middle" class="text-xs fill-gray-500">
+                pmol
+              </text>
+              </svg>
+            </div>
+            <p class="text-xs text-gray-600 text-center mt-3 flex items-center justify-center gap-1" id="click-filter"><i class="fas fa-filter text-purple-400"></i> Cliquez sur une part pour filtrer</p>
+          </div><!-- Tableau récapitulatif -->
+          <div class="card p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold text-gray-800" id="quantitative-summary">Résumé quantitatif</h3><button class="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-500"></i> </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                <tr class="border-b border-purple-200">
+                  <th class="text-left py-3 px-2 text-xs font-semibold text-gray-600 uppercase tracking-wider" id="metric">Métrique</th>
+                  <th class="text-center py-3 px-2 text-xs font-semibold text-purple-500 uppercase tracking-wider">Sample A</th>
+                  <th class="text-center py-3 px-2 text-xs font-semibold text-blue-500 uppercase tracking-wider">Sample B</th>
+                  <th class="text-center py-3 px-2 text-xs font-semibold text-emerald-500 uppercase tracking-wider">QC</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-purple-100">
+                <tr class="hover:bg-purple-100 transition-colors">
+                  <td class="py-3 px-2">
+                    <div class="flex items-center gap-2"><i class="fas fa-flask text-purple-400 text-sm"></i> <span class="text-sm font-medium text-gray-800" id="total-lipids">Total lipides (pmol)</span>
+                    </div></td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">3,000</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">3,300</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">4,400</td>
+                </tr>
+                <tr class="hover:bg-purple-100 transition-colors">
+                  <td class="py-3 px-2">
+                    <div class="flex items-center gap-2"><i class="fas fa-list text-blue-400 text-sm"></i> <span class="text-sm font-medium text-gray-800" id="species-detected">Espèces détectées</span>
+                    </div></td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">150</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">155</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">160</td>
+                </tr>
+                <tr class="hover:bg-purple-100 transition-colors">
+                  <td class="py-3 px-2">
+                    <div class="flex items-center gap-2"><i class="fas fa-layer-group text-emerald-400 text-sm"></i> <span class="text-sm font-medium text-gray-800" id="classes-identified">Classes identifiées</span>
+                    </div></td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">12</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">13</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">14</td>
+                </tr>
+                <tr class="hover:bg-purple-100 transition-colors">
+                  <td class="py-3 px-2">
+                    <div class="flex items-center gap-2"><i class="fas fa-percentage text-rose-400 text-sm"></i> <span class="text-sm font-medium text-gray-800" id="avg-cv">CV moyen (%)</span>
+                    </div></td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">8.2</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">7.8</td>
+                  <td class="text-center py-3 px-2 text-sm text-gray-800 font-semibold">5.4</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 pt-4 border-t border-purple-200">
+              <div class="flex items-center gap-2 text-xs text-gray-600" id="cv-info"><i class="fas fa-info-circle"></i> <span>CV = Coefficient de variation. Valeurs QC utilisées pour le contrôle qualité.</span>
+              </div>
+            </div>
+          </div>
         </div>
-       </div>
-      </div>
-     </div><!-- TAB: Statistiques -->
-     <div id="tab-statistiques" class="tab-content">
-      <div class="flex items-center justify-between mb-6">
-       <div>
-        <h2 class="text-2xl font-bold text-gray-700">Analyse statistique</h2>
-        <p class="text-sm text-gray-500 mt-1">Comparaisons et tests statistiques</p>
-       </div>
-      </div>
-      <div class="grid grid-cols-2 gap-6">
-       <div class="card p-6">
-        <h3 class="font-semibold text-gray-700 mb-4">Box plot: Distribution des lipides</h3>
-        <svg width="100%" height="250" viewbox="0 0 300 250" style="background: rgba(232,213,242,0.2); border-radius: 12px;"><!-- Sample A box --> <rect x="40" y="80" width="50" height="100" fill="#D8B4F8" opacity="0.6" stroke="#D8B4F8" stroke-width="2" /> <line x1="40" y1="130" x2="90" y2="130" stroke="#6B5B7A" stroke-width="2" /> <!-- Sample B box --> <rect x="130" y="60" width="50" height="120" fill="#BFDBFE" opacity="0.6" stroke="#BFDBFE" stroke-width="2" /> <line x1="130" y1="120" x2="180" y2="120" stroke="#5B7BA0" stroke-width="2" /> <!-- QC box --> <rect x="220" y="90" width="50" height="90" fill="#A7F3D0" opacity="0.6" stroke="#A7F3D0" stroke-width="2" /> <line x1="220" y1="135" x2="270" y2="135" stroke="#5B7B6A" stroke-width="2" /> <!-- Labels --> <text x="55" y="230" font-size="12" fill="#666">
-          Sample A
-         </text> <text x="145" y="230" font-size="12" fill="#666">
-          Sample B
-         </text> <text x="235" y="230" font-size="12" fill="#666">
-          QC
-         </text>
-        </svg>
-       </div>
-       <div class="card p-6">
-        <h3 class="font-semibold text-gray-700 mb-4">Résultats des tests</h3>
-        <div class="space-y-3">
-         <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
-          <p class="text-xs font-semibold text-blue-700">ANOVA - Lipides totaux</p>
-          <p class="text-sm text-blue-600">p-value: 0.0234 <span class="text-xs text-blue-500">*</span></p>
-         </div>
-         <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
-          <p class="text-xs font-semibold text-emerald-700">t-test (A vs B)</p>
-          <p class="text-sm text-emerald-600">p-value: 0.3421</p>
-         </div>
-         <div class="p-3 bg-purple-50 rounded-lg border border-purple-100">
-          <p class="text-xs font-semibold text-purple-700">Corrélation PC-PE</p>
-          <p class="text-sm text-purple-600">r = 0.892 <span class="text-xs text-purple-500">***</span></p>
-         </div>
+      </div><!-- TAB: Explorateur -->
+      <div id="tab-explorateur" class="tab-content">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800" id="interactive-explorer">Explorateur interactif</h2>
+            <p class="text-sm text-gray-600 mt-1" id="navigate-filter">Naviguez et filtrez vos données lipidiques</p>
+          </div>
         </div>
-       </div>
+        <div class="grid grid-cols-3 gap-6">
+          <div class="col-span-2 card p-6">
+            <h3 class="font-semibold text-gray-800 mb-4" id="scatter-plot">Scatter plot: PC vs PE</h3>
+            <svg width="100%" height="300" viewbox="0 0 400 300" style="background: linear-gradient(to bottom, rgba(192,132,252,0.2), rgba(147,197,253,0.2));">
+              <defs>
+                <lineargradient id="scatterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#C084FC;stop-opacity:0.8" />
+                  <stop offset="100%" style="stop-color:#93C5FD;stop-opacity:0.8" />
+                </lineargradient>
+              </defs> <!-- Grid --> <line x1="50" y1="280" x2="350" y2="280" stroke="#9CA3AF" stroke-width="2" /> <line x1="50" y1="30" x2="50" y2="280" stroke="#9CA3AF" stroke-width="2" /> <!-- Points Sample A --> <circle cx="120" cy="200" r="4" fill="#C084FC" opacity="0.8" class="hover:brightness-150" /> <circle cx="150" cy="180" r="4" fill="#C084FC" opacity="0.8" /> <circle cx="180" cy="160" r="4" fill="#C084FC" opacity="0.8" /> <circle cx="200" cy="140" r="4" fill="#C084FC" opacity="0.8" /> <!-- Points Sample B --> <circle cx="140" cy="210" r="4" fill="#93C5FD" opacity="0.8" /> <circle cx="170" cy="170" r="4" fill="#93C5FD" opacity="0.8" /> <circle cx="210" cy="130" r="4" fill="#93C5FD" opacity="0.8" /> <circle cx="250" cy="100" r="4" fill="#93C5FD" opacity="0.8" /> <!-- Points QC --> <circle cx="160" cy="190" r="4" fill="#6EE7B7" opacity="0.8" /> <circle cx="190" cy="150" r="4" fill="#6EE7B7" opacity="0.8" /> <circle cx="230" cy="110" r="4" fill="#6EE7B7" opacity="0.8" /> <!-- Labels --> <text x="25" y="285" font-size="12" fill="#374151">
+                PC (mol%)
+              </text> <text x="300" y="310" font-size="12" fill="#374151">
+                PE (mol%)
+              </text>
+            </svg>
+            <div class="flex gap-4 mt-4">
+              <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full" style="background: #C084FC;"></div><span class="text-xs text-gray-700">Sample A (n=12)</span></div>
+              <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full" style="background: #93C5FD;"></div><span class="text-xs text-gray-700">Sample B (n=12)</span></div>
+              <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full" style="background: #6EE7B7;"></div><span class="text-xs text-gray-700">QC (n=6)</span></div>
+            </div>
+          </div>
+          <div class="card p-6">
+            <h3 class="font-semibold text-gray-800 mb-4" id="quick-filters">Filtres rapides</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2 block" id="lipid-class-label">Classe lipidique</label> <select class="w-full p-2 text-sm border border-purple-300 rounded-lg bg-white appearance-none pr-8" id="quick-class"> <option>PC</option> <option>PE</option> <option>PS</option> <option>SM</option> </select>
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2 block" id="carbon-number-label">Nombre de carbones</label> <input type="range" min="10" max="50" value="30" class="w-full" id="quick-carbon">
+                <div class="flex justify-between text-xs text-gray-600 mt-1"><span>10</span><span id="carbon-display">30</span><span>50</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- TAB: Statistiques -->
+      <div id="tab-statistiques" class="tab-content">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800" id="statistical-analysis">Analyse statistique</h2>
+            <p class="text-sm text-gray-600 mt-1" id="comparisons-tests">Comparaisons et tests statistiques</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="card p-6">
+            <h3 class="font-semibold text-gray-800 mb-4" id="box-plot">Box plot: Distribution des lipides</h3>
+            <svg width="100%" height="250" viewbox="0 0 300 250" style="background: rgba(192,132,252,0.1); border-radius: 12px;">
+              <!-- Sample A box --> <rect x="40" y="80" width="50" height="100" fill="#C084FC" opacity="0.6" stroke="#C084FC" stroke-width="2" /> <line x1="40" y1="130" x2="90" y2="130" stroke="#1F2937" stroke-width="2" /> <!-- Sample B box --> <rect x="130" y="60" width="50" height="120" fill="#93C5FD" opacity="0.6" stroke="#93C5FD" stroke-width="2" /> <line x1="130" y1="120" x2="180" y2="120" stroke="#1F2937" stroke-width="2" /> <!-- QC box --> <rect x="220" y="90" width="50" height="90" fill="#6EE7B7" opacity="0.6" stroke="#6EE7B7" stroke-width="2" /> <line x1="220" y1="135" x2="270" y2="135" stroke="#1F2937" stroke-width="2" /> <!-- Labels --> <text x="55" y="230" font-size="12" fill="#374151">
+                Sample A
+              </text> <text x="145" y="230" font-size="12" fill="#374151">
+                Sample B
+              </text> <text x="235" y="230" font-size="12" fill="#374151">
+                QC
+              </text>
+            </svg>
+          </div>
+          <div class="card p-6">
+            <h3 class="font-semibold text-gray-800 mb-4" id="test-results">Résultats des tests</h3>
+            <div class="space-y-3">
+              <div class="p-3 bg-blue-100 rounded-lg border border-blue-300">
+                <p class="text-xs font-semibold text-blue-800" id="anova">ANOVA - Lipides totaux</p>
+                <p class="text-sm text-blue-700">p-value: 0.0234 <span class="text-xs text-blue-600">*</span></p>
+              </div>
+              <div class="p-3 bg-emerald-100 rounded-lg border border-emerald-300">
+                <p class="text-xs font-semibold text-emerald-800" id="ttest">t-test (A vs B)</p>
+                <p class="text-sm text-emerald-700">p-value: 0.3421</p>
+              </div>
+              <div class="p-3 bg-purple-100 rounded-lg border border-purple-300">
+                <p class="text-xs font-semibold text-purple-800" id="correlation">Corrélation PC-PE</p>
+                <p class="text-sm text-purple-700">r = 0.892 <span class="text-xs text-purple-600">***</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- TAB: Multivarié -->
+      <div id="tab-multivarie" class="tab-content">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800" id="multivariate-analysis">Analyse multivariée</h2>
+            <p class="text-sm text-gray-600 mt-1" id="pca-pls">PCA, PLS-DA et méthodes avancées</p>
+          </div>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-semibold text-gray-800 mb-4" id="score-plot">Score plot - PCA (PC1 vs PC2)</h3>
+          <svg width="100%" height="300" viewbox="0 0 400 300" style="background: linear-gradient(135deg, rgba(192,132,252,0.2), rgba(147,197,253,0.2)); border-radius: 12px;">
+            <!-- Grid --> <line x1="50" y1="150" x2="350" y2="150" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="5" /> <line x1="200" y1="30" x2="200" y2="270" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="5" /> <!-- Sample A cluster --> <circle cx="120" cy="120" r="4" fill="#C084FC" opacity="0.9" /> <circle cx="130" cy="140" r="4" fill="#C084FC" opacity="0.9" /> <circle cx="110" cy="130" r="4" fill="#C084FC" opacity="0.9" /> <!-- Sample B cluster --> <circle cx="280" cy="180" r="4" fill="#93C5FD" opacity="0.9" /> <circle cx="290" cy="200" r="4" fill="#93C5FD" opacity="0.9" /> <circle cx="270" cy="190" r="4" fill="#93C5FD" opacity="0.9" /> <!-- QC cluster --> <circle cx="200" cy="80" r="4" fill="#6EE7B7" opacity="0.9" /> <circle cx="210" cy="100" r="4" fill="#6EE7B7" opacity="0.9" /> <!-- Ellipses --> <ellipse cx="120" cy="130" rx="35" ry="25" fill="none" stroke="#C084FC" stroke-width="1" stroke-dasharray="3" opacity="0.7" /> <ellipse cx="280" cy="190" rx="35" ry="25" fill="none" stroke="#93C5FD" stroke-width="1" stroke-dasharray="3" opacity="0.7" /> <ellipse cx="200" cy="90" rx="25" ry="20" fill="none" stroke="#6EE7B7" stroke-width="1" stroke-dasharray="3" opacity="0.7" /> <!-- Labels --> <text x="20" y="155" font-size="11" fill="#374151">
+              PC2
+            </text> <text x="340" y="290" font-size="11" fill="#374151">
+              PC1
+            </text>
+          </svg>
+          <p class="text-xs text-gray-600 mt-4" id="variance-explained">Variance expliquée: PC1 = 45.2%, PC2 = 28.7%</p>
+        </div>
+      </div><!-- TAB: Clustering -->
+      <div id="tab-clustering" class="tab-content">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800" id="clustering-analysis">Analyse de clustering</h2>
+            <p class="text-sm text-gray-600 mt-1" id="hierarchical-kmeans">Classification hiérarchique et k-means</p>
+          </div>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-semibold text-gray-800 mb-4" id="heatmap">Heatmap - Profils lipidiques</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-center">
+              <thead>
+              <tr class="border-b border-purple-200">
+                <th class="py-2 px-2 text-xs font-semibold text-gray-700 text-left" id="sample-header">Échantillon</th>
+                <th class="py-2 px-2 text-xs font-semibold text-gray-700">PC</th>
+                <th class="py-2 px-2 text-xs font-semibold text-gray-700">PE</th>
+                <th class="py-2 px-2 text-xs font-semibold text-gray-700">PS</th>
+                <th class="py-2 px-2 text-xs font-semibold text-gray-700">SM</th>
+                <th class="py-2 px-2 text-xs font-semibold text-gray-700">Cer</th>
+              </tr>
+              </thead>
+              <tbody class="divide-y divide-purple-100">
+              <tr>
+                <td class="py-3 px-2 text-sm font-medium text-gray-800 text-left">Sample A</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(192,132,252,0.9); color: white;">28%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(147,197,253,0.8); color: white;">22%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(110,231,183,0.7);">15%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(249,168,212,0.8);">12%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(253,186,116,0.7);">10%</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-2 text-sm font-medium text-gray-800 text-left">Sample B</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(192,132,252,1); color: white;">32%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(147,197,253,0.7);">20%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(110,231,183,0.6);">14%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(249,168,212,0.9);">14%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(253,186,116,0.6);">8%</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-2 text-sm font-medium text-gray-800 text-left">QC</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(192,132,252,0.85); color: white;">30%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(147,197,253,0.75);">21%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(110,231,183,0.65);">16%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(249,168,212,0.8);">13%</td>
+                <td class="py-3 px-2 text-sm" style="background: rgba(253,186,116,0.6);">9%</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-     </div><!-- TAB: Multivarié -->
-     <div id="tab-multivarie" class="tab-content">
-      <div class="flex items-center justify-between mb-6">
-       <div>
-        <h2 class="text-2xl font-bold text-gray-700">Analyse multivariée</h2>
-        <p class="text-sm text-gray-500 mt-1">PCA, PLS-DA et méthodes avancées</p>
-       </div>
-      </div>
-      <div class="card p-6">
-       <h3 class="font-semibold text-gray-700 mb-4">Score plot - PCA (PC1 vs PC2)</h3>
-       <svg width="100%" height="300" viewbox="0 0 400 300" style="background: linear-gradient(135deg, rgba(232,213,242,0.2), rgba(168,216,234,0.2)); border-radius: 12px;"><!-- Grid --> <line x1="50" y1="150" x2="350" y2="150" stroke="#DDD" stroke-width="1" stroke-dasharray="5" /> <line x1="200" y1="30" x2="200" y2="270" stroke="#DDD" stroke-width="1" stroke-dasharray="5" /> <!-- Sample A cluster --> <circle cx="120" cy="120" r="4" fill="#D8B4F8" opacity="0.8" /> <circle cx="130" cy="140" r="4" fill="#D8B4F8" opacity="0.8" /> <circle cx="110" cy="130" r="4" fill="#D8B4F8" opacity="0.8" /> <!-- Sample B cluster --> <circle cx="280" cy="180" r="4" fill="#BFDBFE" opacity="0.8" /> <circle cx="290" cy="200" r="4" fill="#BFDBFE" opacity="0.8" /> <circle cx="270" cy="190" r="4" fill="#BFDBFE" opacity="0.8" /> <!-- QC cluster --> <circle cx="200" cy="80" r="4" fill="#A7F3D0" opacity="0.8" /> <circle cx="210" cy="100" r="4" fill="#A7F3D0" opacity="0.8" /> <!-- Ellipses --> <ellipse cx="120" cy="130" rx="35" ry="25" fill="none" stroke="#D8B4F8" stroke-width="1" stroke-dasharray="3" opacity="0.5" /> <ellipse cx="280" cy="190" rx="35" ry="25" fill="none" stroke="#BFDBFE" stroke-width="1" stroke-dasharray="3" opacity="0.5" /> <ellipse cx="200" cy="90" rx="25" ry="20" fill="none" stroke="#A7F3D0" stroke-width="1" stroke-dasharray="3" opacity="0.5" /> <!-- Labels --> <text x="20" y="155" font-size="11" fill="#666">
-         PC2
-        </text> <text x="340" y="290" font-size="11" fill="#666">
-         PC1
-        </text>
-       </svg>
-       <p class="text-xs text-gray-500 mt-4">Variance expliquée: PC1 = 45.2%, PC2 = 28.7%</p>
-      </div>
-     </div><!-- TAB: Clustering -->
-     <div id="tab-clustering" class="tab-content">
-      <div class="flex items-center justify-between mb-6">
-       <div>
-        <h2 class="text-2xl font-bold text-gray-700">Analyse de clustering</h2>
-        <p class="text-sm text-gray-500 mt-1">Classification hiérarchique et k-means</p>
-       </div>
-      </div>
-      <div class="card p-6">
-       <h3 class="font-semibold text-gray-700 mb-4">Heatmap - Profils lipidiques</h3>
-       <div class="overflow-x-auto">
-        <table class="w-full text-center">
-         <thead>
-          <tr class="border-b border-purple-100">
-           <th class="py-2 px-2 text-xs font-semibold text-gray-600 text-left">Échantillon</th>
-           <th class="py-2 px-2 text-xs font-semibold text-gray-600">PC</th>
-           <th class="py-2 px-2 text-xs font-semibold text-gray-600">PE</th>
-           <th class="py-2 px-2 text-xs font-semibold text-gray-600">PS</th>
-           <th class="py-2 px-2 text-xs font-semibold text-gray-600">SM</th>
-           <th class="py-2 px-2 text-xs font-semibold text-gray-600">Cer</th>
-          </tr>
-         </thead>
-         <tbody class="divide-y divide-purple-50">
-          <tr>
-           <td class="py-3 px-2 text-sm font-medium text-gray-700 text-left">Sample A</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(216,180,248,0.9); color: white;">28%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(191,219,254,0.8); color: white;">22%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(167,243,208,0.6);">15%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(251,207,232,0.7);">12%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(254,215,170,0.6);">10%</td>
-          </tr>
-          <tr>
-           <td class="py-3 px-2 text-sm font-medium text-gray-700 text-left">Sample B</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(216,180,248,1); color: white;">32%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(191,219,254,0.7);">20%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(167,243,208,0.5);">14%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(251,207,232,0.8);">14%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(254,215,170,0.5);">8%</td>
-          </tr>
-          <tr>
-           <td class="py-3 px-2 text-sm font-medium text-gray-700 text-left">QC</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(216,180,248,0.85); color: white;">30%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(191,219,254,0.75);">21%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(167,243,208,0.6);">16%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(251,207,232,0.75);">13%</td>
-           <td class="py-3 px-2 text-sm" style="background: rgba(254,215,170,0.55);">9%</td>
-          </tr>
-         </tbody>
-        </table>
-       </div>
-      </div>
-     </div>
     </div>
-   </main>
-  </div><!-- Tooltip element -->
-  <div id="tooltip" class="tooltip hidden"></div>
-  <script>
+  </main>
+</div><!-- Tooltip element -->
+<div id="tooltip" class="tooltip hidden"></div>
+<script>
+    // Translation strings
+    const translations = {
+      fr: {
+        dashboard_title: 'LipidoScope',
+        sidebar_subtitle: 'Analyse lipidomique',
+        samples_groups: 'Échantillons et groupes',
+        sample_selection: 'Sélection des échantillons',
+        group_comparison: 'Comparaison de groupes',
+        group1: 'Groupe 1',
+        group2: 'Groupe 2',
+        lipid_filters: 'Filtres lipidiques',
+        category: 'Catégorie',
+        all_categories: 'Toutes les catégories',
+        class: 'Classe',
+        all_classes: 'Toutes les classes',
+        bond_type: 'Type de liaison',
+        all_types: 'Tous les types',
+        global_properties: 'Propriétés globales',
+        total_carbons: 'Carbones totaux',
+        total_unsaturations: 'Insaturations totales',
+        oxygen: 'Oxygène',
+        chain_filters: 'Filtres par chaîne',
+        chain_advanced: 'Filtres avancés par chaîne disponibles en mode expert',
+        value_filters: 'Filtres sur les valeurs',
+        pmol_threshold: 'Seuil pmol',
+        mol_threshold: 'Seuil mol%',
+        text_search: 'Recherche textuelle',
+        search_placeholder: 'Rechercher un lipide...',
+        apply_filters: 'Appliquer les filtres',
+        reset: 'Réinitialiser',
+        home: 'Accueil',
+        explorer: 'Explorateur',
+        statistics: 'Statistiques',
+        multivariate: 'Multivarié',
+        clustering: 'Clustering',
+        overview_title: 'Vue d\'ensemble des classes lipidiques',
+        overview_subtitle: 'Analyse comparative des profils lipidiques',
+        last_update: 'Dernière mise à jour: 15/01/2025',
+        lipid_composition: 'Composition en classes lipidiques',
+        download: 'Télécharger',
+        distribution: 'Répartition par classe',
+        click_filter: 'Cliquez sur une part pour filtrer',
+        quantitative_summary: 'Résumé quantitatif',
+        metric: 'Métrique',
+        total_lipids: 'Total lipides (pmol)',
+        species_detected: 'Espèces détectées',
+        classes_identified: 'Classes identifiées',
+        avg_cv: 'CV moyen (%)',
+        cv_info: 'CV = Coefficient de variation. Valeurs QC utilisées pour le contrôle qualité.',
+        interactive_explorer: 'Explorateur interactif',
+        navigate_filter: 'Naviguez et filtrez vos données lipidiques',
+        scatter_plot: 'Scatter plot: PC vs PE',
+        quick_filters: 'Filtres rapides',
+        lipid_class: 'Classe lipidique',
+        carbon_number: 'Nombre de carbones',
+        statistical_analysis: 'Analyse statistique',
+        comparisons_tests: 'Comparaisons et tests statistiques',
+        box_plot: 'Box plot: Distribution des lipides',
+        test_results: 'Résultats des tests',
+        anova: 'ANOVA - Lipides totaux',
+        ttest: 't-test (A vs B)',
+        correlation: 'Corrélation PC-PE',
+        multivariate_analysis: 'Analyse multivariée',
+        pca_pls: 'PCA, PLS-DA et méthodes avancées',
+        score_plot: 'Score plot - PCA (PC1 vs PC2)',
+        variance_explained: 'Variance expliquée: PC1 = 45.2%, PC2 = 28.7%',
+        clustering_analysis: 'Analyse de clustering',
+        hierarchical_kmeans: 'Classification hiérarchique et k-means',
+        heatmap: 'Heatmap - Profils lipidiques',
+        sample: 'Échantillon',
+        sn1: 'sn1',
+        sn2: 'sn2',
+        sn3: 'sn3',
+        min: 'Min',
+        max: 'Max',
+        all: 'Tous',
+        'Sample A': 'Sample A',
+        'Sample B': 'Sample B',
+        QC: 'QC',
+        'Tous les types': 'Tous les types',
+        Ester: 'Ester',
+        Ether: 'Ether',
+        Amide: 'Amide',
+        'Toutes les catégories': 'Toutes les catégories',
+        Glycerolipids: 'Glycerolipids',
+        Glycerophospholipids: 'Glycerophospholipids',
+        Sphingolipids: 'Sphingolipids',
+        'Sterol Lipids': 'Sterol Lipids',
+        'Fatty Acyls': 'Fatty Acyls',
+        'Toutes les classes': 'Toutes les classes',
+        PC: 'PC',
+        PE: 'PE',
+        PS: 'PS',
+        PI: 'PI',
+        DG: 'DG',
+        TG: 'TG',
+        Cer: 'Cer',
+        SM: 'SM',
+        'Tous': 'Tous',
+        '16:0': '16:0',
+        '18:0': '18:0',
+        '18:1': '18:1',
+        '18:2': '18:2',
+        '20:4': '20:4',
+        '22:6': '22:6',
+        Min: 'Min',
+        Max: 'Max',
+        'Appliquer les filtres': 'Appliquer les filtres',
+        'Réinitialiser': 'Réinitialiser',
+        'Total': 'Total',
+        'pmol': 'pmol',
+        'Axe Y': '',
+        'Légende': '',
+        'Accueil': 'Accueil',
+        'Explorateur': 'Explorateur',
+        'Statistiques': 'Statistiques',
+        'Multivarié': 'Multivarié',
+        'Clustering': 'Clustering',
+        'Dernière mise à jour:': 'Dernière mise à jour:',
+        'Actualiser': 'Actualiser',
+        'Télécharger': 'Télécharger',
+        'Composition en classes lipidiques': 'Composition en classes lipidiques',
+        'Répartition par classe': 'Répartition par classe',
+        'Résumé quantitatif': 'Résumé quantitatif',
+        'Métrique': 'Métrique',
+        'Total lipides (pmol)': 'Total lipides (pmol)',
+        'Espèces détectées': 'Espèces détectées',
+        'Classes identifiées': 'Classes identifiées',
+        'CV moyen (%)': 'CV moyen (%)',
+        'CV = Coefficient de variation. Valeurs QC utilisées pour le contrôle qualité.': 'CV = Coefficient de variation. Valeurs QC utilisées pour le contrôle qualité.',
+        'Naviguez et filtrez vos données lipidiques': 'Naviguez et filtrez vos données lipidiques',
+        'Scatter plot: PC vs PE': 'Scatter plot: PC vs PE',
+        'Filtres rapides': 'Filtres rapides',
+        'Classe lipidique': 'Classe lipidique',
+        'Nombre de carbones': 'Nombre de carbones',
+        'Analyse statistique': 'Analyse statistique',
+        'Comparaisons et tests statistiques': 'Comparaisons et tests statistiques',
+        'Box plot: Distribution des lipides': 'Box plot: Distribution des lipides',
+        'Résultats des tests': 'Résultats des tests',
+        'ANOVA - Lipides totaux': 'ANOVA - Lipides totaux',
+        't-test (A vs B)': 't-test (A vs B)',
+        'Corrélation PC-PE': 'Corrélation PC-PE',
+        'Analyse multivariée': 'Analyse multivariée',
+        'PCA, PLS-DA et méthodes avancées': 'PCA, PLS-DA et méthodes avancées',
+        'Score plot - PCA (PC1 vs PC2)': 'Score plot - PCA (PC1 vs PC2)',
+        'Variance expliquée: PC1 = 45.2%, PC2 = 28.7%': 'Variance expliquée: PC1 = 45.2%, PC2 = 28.7%',
+        'Analyse de clustering': 'Analyse de clustering',
+        'Classification hiérarchique et k-means': 'Classification hiérarchique et k-means',
+        'Heatmap - Profils lipidiques': 'Heatmap - Profils lipidiques',
+        'Échantillon': 'Échantillon',
+        'sn1': 'sn1',
+        'sn2': 'sn2',
+        'sn3': 'sn3',
+      },
+      en: {
+        dashboard_title: 'LipidoScope',
+        sidebar_subtitle: 'Lipidomic Analysis',
+        samples_groups: 'Samples and Groups',
+        sample_selection: 'Sample Selection',
+        group_comparison: 'Group Comparison',
+        group1: 'Group 1',
+        group2: 'Group 2',
+        lipid_filters: 'Lipid Filters',
+        category: 'Category',
+        all_categories: 'All Categories',
+        class: 'Class',
+        all_classes: 'All Classes',
+        bond_type: 'Bond Type',
+        all_types: 'All Types',
+        global_properties: 'Global Properties',
+        total_carbons: 'Total Carbons',
+        total_unsaturations: 'Total Unsaturations',
+        oxygen: 'Oxygen',
+        chain_filters: 'Chain Filters',
+        chain_advanced: 'Advanced chain filters available in expert mode',
+        value_filters: 'Value Filters',
+        pmol_threshold: 'pmol Threshold',
+        mol_threshold: 'mol% Threshold',
+        text_search: 'Text Search',
+        search_placeholder: 'Search for a lipid...',
+        apply_filters: 'Apply Filters',
+        reset: 'Reset',
+        home: 'Home',
+        explorer: 'Explorer',
+        statistics: 'Statistics',
+        multivariate: 'Multivariate',
+        clustering: 'Clustering',
+        overview_title: 'Overview of Lipid Classes',
+        overview_subtitle: 'Comparative Analysis of Lipid Profiles',
+        last_update: 'Last updated: 15/01/2025',
+        lipid_composition: 'Lipid Class Composition',
+        download: 'Download',
+        distribution: 'Distribution by Class',
+        click_filter: 'Click on a segment to filter',
+        quantitative_summary: 'Quantitative Summary',
+        metric: 'Metric',
+        total_lipids: 'Total Lipids (pmol)',
+        species_detected: 'Species Detected',
+        classes_identified: 'Classes Identified',
+        avg_cv: 'Average CV (%)',
+        cv_info: 'CV = Coefficient of Variation. QC values used for quality control.',
+        interactive_explorer: 'Interactive Explorer',
+        navigate_filter: 'Navigate and filter your lipid data',
+        scatter_plot: 'Scatter plot: PC vs PE',
+        quick_filters: 'Quick Filters',
+        lipid_class: 'Lipid Class',
+        carbon_number: 'Number of Carbons',
+        statistical_analysis: 'Statistical Analysis',
+        comparisons_tests: 'Comparisons and Statistical Tests',
+        box_plot: 'Box plot: Lipid Distribution',
+        test_results: 'Test Results',
+        anova: 'ANOVA - Total Lipids',
+        ttest: 't-test (A vs B)',
+        correlation: 'Correlation PC-PE',
+        multivariate_analysis: 'Multivariate Analysis',
+        pca_pls: 'PCA, PLS-DA and Advanced Methods',
+        score_plot: 'Score plot - PCA (PC1 vs PC2)',
+        variance_explained: 'Variance explained: PC1 = 45.2%, PC2 = 28.7%',
+        clustering_analysis: 'Clustering Analysis',
+        hierarchical_kmeans: 'Hierarchical Classification and k-means',
+        heatmap: 'Heatmap - Lipid Profiles',
+        sample: 'Sample',
+        sn1: 'sn1',
+        sn2: 'sn2',
+        sn3: 'sn3',
+        min: 'Min',
+        max: 'Max',
+        all: 'All',
+        'Sample A': 'Sample A',
+        'Sample B': 'Sample B',
+        QC: 'QC',
+        'Tous les types': 'All Types',
+        Ester: 'Ester',
+        Ether: 'Ether',
+        Amide: 'Amide',
+        'Toutes les catégories': 'All Categories',
+        Glycerolipids: 'Glycerolipids',
+        Glycerophospholipids: 'Glycerophospholipids',
+        Sphingolipids: 'Sphingolipids',
+        'Sterol Lipids': 'Sterol Lipids',
+        'Fatty Acyls': 'Fatty Acyls',
+        'Toutes les classes': 'All Classes',
+        PC: 'PC',
+        PE: 'PE',
+        PS: 'PS',
+        PI: 'PI',
+        DG: 'DG',
+        TG: 'TG',
+        Cer: 'Cer',
+        SM: 'SM',
+        'Tous': 'All',
+        '16:0': '16:0',
+        '18:0': '18:0',
+        '18:1': '18:1',
+        '18:2': '18:2',
+        '20:4': '20:4',
+        '22:6': '22:6',
+        Min: 'Min',
+        Max: 'Max',
+        'Appliquer les filtres': 'Apply Filters',
+        'Réinitialiser': 'Reset',
+        'Total': 'Total',
+        'pmol': 'pmol',
+        'Accueil': 'Home',
+        'Explorateur': 'Explorer',
+        'Statistiques': 'Statistics',
+        'Multivarié': 'Multivariate',
+        'Clustering': 'Clustering',
+        'Dernière mise à jour:': 'Last updated:',
+        'Actualiser': 'Refresh',
+        'Télécharger': 'Download',
+        'Composition en classes lipidiques': 'Lipid Class Composition',
+        'Répartition par classe': 'Distribution by Class',
+        'Résumé quantitatif': 'Quantitative Summary',
+        'Métrique': 'Metric',
+        'Total lipides (pmol)': 'Total Lipids (pmol)',
+        'Espèces détectées': 'Species Detected',
+        'Classes identifiées': 'Classes Identified',
+        'CV moyen (%)': 'Average CV (%)',
+        'CV = Coefficient de variation. Valeurs QC utilisées pour le contrôle qualité.': 'CV = Coefficient of Variation. QC values used for quality control.',
+        'Naviguez et filtrez vos données lipidiques': 'Navigate and filter your lipid data',
+        'Scatter plot: PC vs PE': 'Scatter plot: PC vs PE',
+        'Filtres rapides': 'Quick Filters',
+        'Classe lipidique': 'Lipid Class',
+        'Nombre de carbones': 'Number of Carbons',
+        'Analyse statistique': 'Statistical Analysis',
+        'Comparaisons et tests statistiques': 'Comparisons and Statistical Tests',
+        'Box plot: Distribution des lipides': 'Box plot: Lipid Distribution',
+        'Résultats des tests': 'Test Results',
+        'ANOVA - Lipides totaux': 'ANOVA - Total Lipids',
+        't-test (A vs B)': 't-test (A vs B)',
+        'Corrélation PC-PE': 'Correlation PC-PE',
+        'Analyse multivariée': 'Multivariate Analysis',
+        'PCA, PLS-DA et méthodes avancées': 'PCA, PLS-DA and Advanced Methods',
+        'Score plot - PCA (PC1 vs PC2)': 'Score plot - PCA (PC1 vs PC2)',
+        'Variance expliquée: PC1 = 45.2%, PC2 = 28.7%': 'Variance explained: PC1 = 45.2%, PC2 = 28.7%',
+        'Analyse de clustering': 'Clustering Analysis',
+        'Classification hiérarchique et k-means': 'Hierarchical Classification and k-means',
+        'Heatmap - Profils lipidiques': 'Heatmap - Lipid Profiles',
+        'Échantillon': 'Sample',
+        'sn1': 'sn1',
+        'sn2': 'sn2',
+        'sn3': 'sn3',
+      }
+    };
+
+    let currentLanguage = 'fr';
+
+    // Language switcher
+    document.getElementById('lang-fr').addEventListener('click', () => setLanguage('fr'));
+    document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      
+      // Update button styles
+      document.getElementById('lang-fr').classList.toggle('lang-active', lang === 'fr');
+      document.getElementById('lang-en').classList.toggle('lang-active', lang === 'en');
+      
+      if (lang === 'fr') {
+        document.getElementById('lang-fr').style.background = '#C026D3';
+        document.getElementById('lang-fr').style.color = 'white';
+        document.getElementById('lang-en').style.background = 'transparent';
+        document.getElementById('lang-en').style.color = '#374151';
+      } else {
+        document.getElementById('lang-fr').style.background = 'transparent';
+        document.getElementById('lang-fr').style.color = '#374151';
+        document.getElementById('lang-en').style.background = '#0284C7';
+        document.getElementById('lang-en').style.color = 'white';
+      }
+      
+      updateAllText();
+    }
+
+    function t(key) {
+      return translations[currentLanguage][key] || translations.fr[key] || key;
+    }
+
+    function updateAllText() {
+      // Mise à jour par ID (principaux éléments textuels)
+      const elements = {
+        'dashboard-title': 'dashboard_title',
+        'sidebar-subtitle': 'sidebar_subtitle',
+        'samples-groups': 'samples_groups',
+        'sample-selection': 'sample_selection',
+        'group-comparison': 'group_comparison',
+        'lipid-filters': 'lipid_filters',
+        'category-label': 'category',
+        'class-label': 'class',
+        'bond-type-label': 'bond_type',
+        'global-properties': 'global_properties',
+        'total-carbons': 'total_carbons',
+        'total-unsaturations': 'total_unsaturations',
+        'oxygen-label': 'oxygen',
+        'chain-filters': 'chain_filters',
+        'sn1-label': 'sn1',
+        'sn2-label': 'sn2',
+        'sn3-label': 'sn3',
+        'chain-advanced': 'chain_advanced',
+        'value-filters': 'value_filters',
+        'pmol-threshold': 'pmol_threshold',
+        'mol-threshold': 'mol_threshold',
+        'text-search': 'text_search',
+        'apply-filters': 'apply_filters',
+        'reset': 'reset',
+        'tab-home': 'home',
+        'tab-explorer': 'explorer',
+        'tab-statistics': 'statistics',
+        'tab-multivariate': 'multivariate',
+        'tab-clustering': 'clustering',
+        'overview-title': 'overview_title',
+        'overview-subtitle': 'overview_subtitle',
+        'last-update': 'last_update',
+        'lipid-composition': 'lipid_composition',
+        'distribution-title': 'distribution',
+        'click-filter': 'click_filter',
+        'quantitative-summary': 'quantitative_summary',
+        'metric': 'metric',
+        'total-lipids': 'total_lipids',
+        'species-detected': 'species_detected',
+        'classes-identified': 'classes_identified',
+        'avg-cv': 'avg_cv',
+        'cv-info': 'cv_info',
+        'interactive-explorer': 'interactive_explorer',
+        'navigate-filter': 'navigate_filter',
+        'scatter-plot': 'scatter_plot',
+        'quick-filters': 'quick_filters',
+        'lipid-class-label': 'lipid_class',
+        'carbon-number-label': 'carbon_number',
+        'statistical-analysis': 'statistical_analysis',
+        'comparisons-tests': 'comparisons_tests',
+        'box-plot': 'box_plot',
+        'test-results': 'test_results',
+        'anova': 'anova',
+        'ttest': 'ttest',
+        'correlation': 'correlation',
+        'multivariate-analysis': 'multivariate_analysis',
+        'pca-pls': 'pca_pls',
+        'score-plot': 'score_plot',
+        'variance-explained': 'variance_explained',
+        'clustering-analysis': 'clustering_analysis',
+        'hierarchical-kmeans': 'hierarchical_kmeans',
+        'heatmap': 'heatmap',
+        'sample-header': 'sample',
+      };
+
+      for (const [id, key] of Object.entries(elements)) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = t(key);
+      }
+
+      // Placeholders
+      document.getElementById('search-input').placeholder = t('search_placeholder');
+      document.getElementById('pmol-min').placeholder = t('min');
+      document.getElementById('pmol-max').placeholder = t('max');
+      document.getElementById('mol-min').placeholder = t('min');
+      document.getElementById('mol-max').placeholder = t('max');
+
+      // Options des selects (traduction des textes statiques)
+      const selectIds = [
+        { id: 'category-select', options: ['Toutes les catégories', 'Glycerolipids', 'Glycerophospholipids', 'Sphingolipids', 'Sterol Lipids', 'Fatty Acyls'] },
+        { id: 'class-select', options: ['Toutes les classes', 'PC', 'PE', 'PS', 'PI', 'DG', 'TG', 'Cer', 'SM'] },
+        { id: 'bond-select', options: ['Tous les types', 'Ester', 'Ether', 'Amide'] },
+        { id: 'sn1-select', options: ['Tous', '16:0', '18:0', '18:1', '18:2'] },
+        { id: 'sn2-select', options: ['Tous', '16:0', '18:1', '18:2', '20:4'] },
+        { id: 'sn3-select', options: ['Tous', '16:0', '18:0', '22:6'] },
+        { id: 'group1-select', options: ['Groupe 1', 'Sample A', 'Sample B', 'QC'] },
+        { id: 'group2-select', options: ['Groupe 2', 'Sample A', 'Sample B', 'QC'] },
+        { id: 'pie-sample-select', options: ['Sample A', 'Sample B', 'QC'] },
+        { id: 'quick-class', options: ['PC', 'PE', 'PS', 'SM'] },
+      ];
+
+      selectIds.forEach(({id, options}) => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        const currentValue = select.value;
+        // On reconstruit les options avec traduction
+        select.innerHTML = '';
+        options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt;
+          option.textContent = t(opt);
+          select.appendChild(option);
+        });
+        // Restaurer la valeur si possible
+        if (options.includes(currentValue)) select.value = currentValue;
+        else select.value = options[0];
+      });
+
+      // Autres éléments textuels (ex: les th de tableau, etc) sont déjà couverts par les IDs
+      // Les légendes des graphiques (ex: les noms sous les barres) ne sont pas modifiées car ce sont des noms d'échantillons (non traduits)
+    }
+
+    // Initial text update
+    updateAllText();
+    
     // Default configuration
     const defaultConfig = {
       dashboard_title: 'LipidoScope',
-      overview_title: 'Vue d\'ensemble des classes lipidiques',
-      primary_color: '#E8D5F2',
+      overview_title: t('overview_title'),
+      primary_color: '#C026D3',
       background_color: '#F3F4F6',
-      text_color: '#5A5A5A',
+      text_color: '#111827',
       surface_color: '#FFFFFF',
-      accent_color: '#A8D8EA'
+      accent_color: '#0284C7'
     };
     
     // Initialize Element SDK
@@ -788,6 +1184,22 @@
       
       const options = classOptions[category] || classOptions.all;
       classSelect.innerHTML = options.map(opt => `<option>${opt}</option>`).join('');
+      // Retraduire après modification
+      if (currentLanguage === 'en') {
+        // On pourrait rappeler la traduction, mais pour simplifier on met à jour avec les valeurs originales et on retraduit via le système de traduction
+        // On va plutôt réappliquer la traduction sur ce select
+        const select = classSelect;
+        const currentValue = select.value;
+        select.innerHTML = '';
+        options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt;
+          option.textContent = t(opt);
+          select.appendChild(option);
+        });
+        if (options.includes(currentValue)) select.value = currentValue;
+        else select.value = options[0];
+      }
     }
     
     // Tooltip functionality
@@ -878,5 +1290,5 @@
       });
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d30d44a35c0009c',t:'MTc3MTk1NTY3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
