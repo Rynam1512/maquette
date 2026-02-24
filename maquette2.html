@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="fr" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lipidomics Dashboard</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    
+    :root {
+      --primary: #E8D5F2;
+      --accent: #A8D8EA;
+      --success: #C1F0D4;
+      --warning: #FEE8D1;
+      --danger: #F7D1D1;
+      --neutral: #E9E5E0;
+      --text-dark: #5A5A5A;
+      --text-light: #8B8B8B;
+    }
+    
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+    }
+    
+    .accordion-content.open {
+      max-height: 3000px;
+      opacity: 1;
+    }
+    
+    .range-slider {
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--accent), var(--primary));
+    }
+    
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(168, 216, 234, 0.4);
+      border: 2px solid var(--accent);
+      transition: all 0.3s ease;
+    }
+    
+    .range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 6px 16px rgba(168, 216, 234, 0.6);
+    }
+    
+    .tooltip {
+      position: absolute;
+      background: rgba(90, 90, 90, 0.95);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 100;
+      white-space: nowrap;
+      transform: translate(-50%, -100%);
+      margin-top: -10px;
+      backdrop-filter: blur(4px);
+    }
+    
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: rgba(90, 90, 90, 0.95) transparent transparent transparent;
+    }
+    
+    .tab-btn {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px 3px 0 0;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .tab-active::after {
+      transform: scaleX(1);
+    }
+    
+    .tab-active {
+      color: var(--accent) !important;
+      font-weight: 600;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(232, 213, 242, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: 0 8px 28px rgba(168, 216, 234, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .checkbox-custom {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23A8D8EA'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    select:focus {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23A8D8EA'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.2);
+    }
+    
+    input[type="text"], input[type="number"] {
+      transition: all 0.3s ease;
+    }
+    
+    input[type="text"]:focus, input[type="number"]:focus {
+      box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.2);
+      border-color: var(--accent);
+    }
+    
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    .bar-segment {
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .bar-segment:hover {
+      filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+    
+    .pie-segment {
+      transition: all 0.3s ease;
+    }
+    
+    .pie-segment:hover {
+      filter: brightness(1.12) drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+    }
+    
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .loading { animation: pulse 1.5s ease-in-out infinite; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-blue-50 to-purple-50 overflow-auto">
+  <div class="flex h-full min-h-full">
+   <!-- Sidebar -->
+   <aside class="w-1/4 min-w-[280px] max-w-[350px] bg-white border-r border-purple-100 flex flex-col h-full overflow-y-auto">
+    <div class="p-4 border-b border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-gradient-to-br from-purple-300 to-blue-300 rounded-xl flex items-center justify-center shadow-lg">
+       <i class="fas fa-flask text-white"></i>
+      </div>
+      <div>
+       <h1 id="dashboard-title" class="text-lg font-bold text-gray-700">LipidoScope</h1>
+       <p class="text-xs text-gray-400">Analyse lipidomique</p>
+      </div>
+     </div>
+    </div>
+    <div class="flex-1 overflow-y-auto p-3 space-y-2">
+     <!-- Section 1: Échantillons et groupes -->
+     <div class="accordion-section">
+      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+       <div class="flex items-center gap-2">
+        <i class="fas fa-vials text-purple-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Échantillons et groupes</span>
+       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
+      <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-purple-100">
+       <div>
+        <label class="text-xs font-semibold text-gray-600 mb-2 block uppercase tracking-wide">Sélection des échantillons</label>
+        <div class="space-y-2">
+         <label class="flex items-center gap-2 cursor-pointer hover:bg-purple-50 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-700">Sample A</span> <span class="ml-auto text-xs px-2 py-0.5 bg-purple-100 text-purple-600 rounded-full font-medium">n=12</span> </label> <label class="flex items-center gap-2 cursor-pointer hover:bg-blue-50 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-700">Sample B</span> <span class="ml-auto text-xs px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full font-medium">n=12</span> </label> <label class="flex items-center gap-2 cursor-pointer hover:bg-teal-50 p-1.5 rounded transition-colors"> <input type="checkbox" class="checkbox-custom" checked> <span class="text-sm text-gray-700">QC</span> <span class="ml-auto text-xs px-2 py-0.5 bg-teal-100 text-teal-600 rounded-full font-medium">n=6</span> </label>
+        </div>
+       </div>
+       <div class="border-t border-purple-100 pt-3">
+        <label class="text-xs font-semibold text-gray-600 mb-2 block uppercase tracking-wide">Comparaison de groupes</label>
+        <div class="grid grid-cols-2 gap-2">
+         <select class="w-full p-2 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300 focus:border-purple-300"> <option>Groupe 1</option> <option>Sample A</option> <option>Sample B</option> <option>QC</option> </select> <select class="w-full p-2 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300 focus:border-purple-300"> <option>Groupe 2</option> <option>Sample A</option> <option>Sample B</option> <option>QC</option> </select>
+        </div>
+       </div>
+      </div>
+     </div><!-- Section 2: Filtres lipidiques -->
+     <div class="accordion-section">
+      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+       <div class="flex items-center gap-2">
+        <i class="fas fa-filter text-blue-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Filtres lipidiques</span>
+       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
+      <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-blue-100">
+       <div>
+        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Catégorie</label> <select id="category-select" class="w-full p-2 text-sm border border-blue-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300" onchange="updateClasses()"> <option value="all">Toutes les catégories</option> <option value="glycerolipids">Glycerolipids</option> <option value="glycerophospholipids">Glycerophospholipids</option> <option value="sphingolipids">Sphingolipids</option> <option value="sterol">Sterol Lipids</option> <option value="fatty">Fatty Acyls</option> </select>
+       </div>
+       <div>
+        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Classe</label> <select id="class-select" class="w-full p-2 text-sm border border-blue-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300"> <option value="all">Toutes les classes</option> <option>PC</option> <option>PE</option> <option>PS</option> <option>PI</option> <option>DG</option> <option>TG</option> <option>Cer</option> <option>SM</option> </select>
+       </div>
+       <div>
+        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Type de liaison</label> <select class="w-full p-2 text-sm border border-blue-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-blue-300 focus:border-blue-300"> <option value="all">Tous les types</option> <option>Ester</option> <option>Ether</option> <option>Amide</option> </select>
+       </div>
+      </div>
+     </div><!-- Section 3: Propriétés globales -->
+     <div class="accordion-section">
+      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+       <div class="flex items-center gap-2">
+        <i class="fas fa-sliders-h text-emerald-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Propriétés globales</span>
+       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
+      <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-4 border border-emerald-100">
+       <div>
+        <div class="flex justify-between items-center mb-2">
+         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Carbones totaux</label> <span class="text-xs text-purple-500 font-bold" id="carbon-value">10 - 60</span>
+        </div>
+        <div class="flex gap-2 items-center">
+         <input type="range" min="10" max="60" value="10" class="range-slider flex-1" id="carbon-min" oninput="updateRangeDisplay('carbon')"> <input type="range" min="10" max="60" value="60" class="range-slider flex-1" id="carbon-max" oninput="updateRangeDisplay('carbon')">
+        </div>
+       </div>
+       <div>
+        <div class="flex justify-between items-center mb-2">
+         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Insaturations totales</label> <span class="text-xs text-purple-500 font-bold" id="unsat-value">0 - 10</span>
+        </div>
+        <div class="flex gap-2 items-center">
+         <input type="range" min="0" max="10" value="0" class="range-slider flex-1" id="unsat-min" oninput="updateRangeDisplay('unsat')"> <input type="range" min="0" max="10" value="10" class="range-slider flex-1" id="unsat-max" oninput="updateRangeDisplay('unsat')">
+        </div>
+       </div>
+       <div>
+        <div class="flex justify-between items-center mb-2">
+         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Oxygène</label> <span class="text-xs text-purple-500 font-bold" id="oxygen-value">0 - 5</span>
+        </div>
+        <div class="flex gap-2 items-center">
+         <input type="range" min="0" max="5" value="0" class="range-slider flex-1" id="oxygen-min" oninput="updateRangeDisplay('oxygen')"> <input type="range" min="0" max="5" value="5" class="range-slider flex-1" id="oxygen-max" oninput="updateRangeDisplay('oxygen')">
+        </div>
+       </div>
+      </div>
+     </div><!-- Section 4: Filtres par chaîne -->
+     <div class="accordion-section">
+      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+       <div class="flex items-center gap-2">
+        <i class="fas fa-link text-orange-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Filtres par chaîne</span>
+       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
+      <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-orange-100">
+       <div class="grid grid-cols-3 gap-2">
+        <div>
+         <label class="text-xs font-semibold text-gray-600 mb-1 block uppercase tracking-wide">sn1</label> <select class="w-full p-2 text-xs border border-orange-200 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300"> <option>Tous</option> <option>16:0</option> <option>18:0</option> <option>18:1</option> <option>18:2</option> </select>
+        </div>
+        <div>
+         <label class="text-xs font-semibold text-gray-600 mb-1 block uppercase tracking-wide">sn2</label> <select class="w-full p-2 text-xs border border-orange-200 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300"> <option>Tous</option> <option>16:0</option> <option>18:1</option> <option>18:2</option> <option>20:4</option> </select>
+        </div>
+        <div>
+         <label class="text-xs font-semibold text-gray-600 mb-1 block uppercase tracking-wide">sn3</label> <select class="w-full p-2 text-xs border border-orange-200 rounded-lg bg-white appearance-none pr-6 focus:ring-2 focus:ring-orange-300"> <option>Tous</option> <option>16:0</option> <option>18:0</option> <option>22:6</option> </select>
+        </div>
+       </div>
+       <div class="border-t border-orange-100 pt-3">
+        <p class="text-xs text-gray-400 italic">Filtres avancés par chaîne disponibles en mode expert</p>
+       </div>
+      </div>
+     </div><!-- Section 5: Filtres sur les valeurs -->
+     <div class="accordion-section">
+      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+       <div class="flex items-center gap-2">
+        <i class="fas fa-chart-line text-rose-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Filtres sur les valeurs</span>
+       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
+      <div class="accordion-content mt-2 bg-white rounded-lg shadow-sm p-3 space-y-3 border border-rose-100">
+       <div>
+        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Seuil pmol</label>
+        <div class="grid grid-cols-2 gap-2">
+         <input type="number" placeholder="Min" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="0"> <input type="number" placeholder="Max" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="10000">
+        </div>
+       </div>
+       <div>
+        <label class="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Seuil mol%</label>
+        <div class="grid grid-cols-2 gap-2">
+         <input type="number" placeholder="Min" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="0" step="0.1"> <input type="number" placeholder="Max" class="w-full p-2 text-sm border border-rose-200 rounded-lg focus:ring-2 focus:ring-rose-300 focus:border-rose-300" value="100" step="0.1">
+        </div>
+       </div>
+      </div>
+     </div><!-- Section 6: Recherche textuelle -->
+     <div class="accordion-section">
+      <button class="accordion-trigger w-full flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all" onclick="toggleAccordion(this)">
+       <div class="flex items-center gap-2">
+        <i class="fas fa-search text-indigo-300 w-5"></i> <span class="font-medium text-gray-700 text-sm">Recherche textuelle</span>
+       </div><i class="fas fa-chevron-down text-gray-300 text-xs accordion-icon transition-transform"></i> </button>
+      <div class="accordion-content open mt-2 bg-white rounded-lg shadow-sm p-3 border border-indigo-100">
+       <div class="relative">
+        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-sm"></i> <input type="text" placeholder="Rechercher un lipide..." class="w-full pl-10 pr-4 py-2.5 text-sm border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300">
+       </div>
+      </div>
+     </div>
+    </div><!-- Boutons d'action -->
+    <div class="p-3 border-t border-purple-100 bg-gradient-to-r from-purple-50 to-blue-50 space-y-2">
+     <button class="w-full py-2.5 bg-gradient-to-r from-purple-300 to-blue-300 hover:from-purple-400 hover:to-blue-400 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"> <i class="fas fa-check"></i> Appliquer les filtres </button> <button class="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"> <i class="fas fa-redo"></i> Réinitialiser </button>
+    </div>
+   </aside><!-- Main Content -->
+   <main class="flex-1 flex flex-col h-full overflow-hidden">
+    <!-- Header avec onglets -->
+    <header class="bg-white border-b border-purple-100 px-6 py-0 shadow-sm">
+     <nav class="flex items-center gap-2">
+      <button class="tab-btn tab-active px-5 py-4 text-sm font-medium transition-all flex items-center gap-2 text-purple-400" data-tab="accueil" onclick="switchTab('accueil', event)"> <i class="fas fa-home"></i> Accueil </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="explorateur" onclick="switchTab('explorateur', event)"> <i class="fas fa-search"></i> Explorateur </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="statistiques" onclick="switchTab('statistiques', event)"> <i class="fas fa-chart-bar"></i> Statistiques </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="multivarie" onclick="switchTab('multivarie', event)"> <i class="fas fa-cube"></i> Multivarié </button> <button class="tab-btn px-5 py-4 text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-2" data-tab="clustering" onclick="switchTab('clustering', event)"> <i class="fas fa-sitemap"></i> Clustering </button>
+     </nav>
+    </header><!-- Contenu principal -->
+    <div class="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50">
+     <!-- TAB: Accueil -->
+     <div id="tab-accueil" class="tab-content active">
+      <!-- Titre de la section -->
+      <div class="flex items-center justify-between mb-6">
+       <div>
+        <h2 id="overview-title" class="text-2xl font-bold text-gray-700">Vue d'ensemble des classes lipidiques</h2>
+        <p class="text-sm text-gray-500 mt-1">Analyse comparative des profils lipidiques</p>
+       </div>
+       <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-400">Dernière mise à jour: 15/01/2025</span> <button class="p-2 hover:bg-white rounded-lg transition-colors" title="Actualiser"> <i class="fas fa-sync-alt text-gray-400"></i> </button>
+       </div>
+      </div><!-- Graphique en barres empilées -->
+      <div class="card p-5 mb-6">
+       <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold text-gray-700">Composition en classes lipidiques</h3><button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-400"></i> </button>
+       </div>
+       <div class="flex">
+        <!-- Zone du graphique -->
+        <div class="flex-1">
+         <div class="flex items-end justify-around h-64 px-4" id="bar-chart">
+          <!-- Sample A -->
+          <div class="flex flex-col items-center group">
+           <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="Sample A">
+            <div class="bg-purple-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 28%" data-class="PC" data-value="28"></div>
+            <div class="bg-blue-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 22%" data-class="PE" data-value="22"></div>
+            <div class="bg-emerald-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 15%" data-class="PS" data-value="15"></div>
+            <div class="bg-rose-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 12%" data-class="SM" data-value="12"></div>
+            <div class="bg-amber-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 10%" data-class="Cer" data-value="10"></div>
+            <div class="bg-pink-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 8%" data-class="PI" data-value="8"></div>
+            <div class="bg-gray-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 5%" data-class="Autres" data-value="5"></div>
+           </div><span class="mt-2 text-sm font-medium text-gray-600">Sample A</span>
+          </div><!-- Sample B -->
+          <div class="flex flex-col items-center group">
+           <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="Sample B">
+            <div class="bg-purple-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 32%" data-class="PC" data-value="32"></div>
+            <div class="bg-blue-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 20%" data-class="PE" data-value="20"></div>
+            <div class="bg-emerald-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 14%" data-class="PS" data-value="14"></div>
+            <div class="bg-rose-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 14%" data-class="SM" data-value="14"></div>
+            <div class="bg-amber-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 8%" data-class="Cer" data-value="8"></div>
+            <div class="bg-pink-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 7%" data-class="PI" data-value="7"></div>
+            <div class="bg-gray-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 5%" data-class="Autres" data-value="5"></div>
+           </div><span class="mt-2 text-sm font-medium text-gray-600">Sample B</span>
+          </div><!-- QC -->
+          <div class="flex flex-col items-center group">
+           <div class="w-20 h-56 flex flex-col-reverse rounded-t-lg overflow-hidden shadow-sm relative" data-sample="QC">
+            <div class="bg-purple-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 30%" data-class="PC" data-value="30"></div>
+            <div class="bg-blue-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 21%" data-class="PE" data-value="21"></div>
+            <div class="bg-emerald-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 16%" data-class="PS" data-value="16"></div>
+            <div class="bg-rose-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 13%" data-class="SM" data-value="13"></div>
+            <div class="bg-amber-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 9%" data-class="Cer" data-value="9"></div>
+            <div class="bg-pink-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 7%" data-class="PI" data-value="7"></div>
+            <div class="bg-gray-200 hover:brightness-110 transition-all cursor-pointer bar-segment" style="height: 4%" data-class="Autres" data-value="4"></div>
+           </div><span class="mt-2 text-sm font-medium text-gray-600">QC</span>
+          </div>
+         </div><!-- Axe Y -->
+         <div class="absolute left-0 h-56 flex flex-col justify-between text-xs text-gray-400 py-1" style="margin-left: -30px; margin-top: -230px;">
+          <span>100%</span> <span>75%</span> <span>50%</span> <span>25%</span> <span>0%</span>
+         </div>
+        </div><!-- Légende -->
+        <div class="ml-8 flex flex-col justify-center gap-2">
+         <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-purple-200"></div><span class="text-sm text-gray-600">PC</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-blue-200"></div><span class="text-sm text-gray-600">PE</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-emerald-200"></div><span class="text-sm text-gray-600">PS</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-rose-200"></div><span class="text-sm text-gray-600">SM</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-amber-200"></div><span class="text-sm text-gray-600">Cer</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-pink-200"></div><span class="text-sm text-gray-600">PI</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-gray-200"></div><span class="text-sm text-gray-600">Autres</span>
+         </div>
+        </div>
+       </div>
+      </div><!-- Zone inférieure: Camembert + Tableau -->
+      <div class="grid grid-cols-2 gap-6">
+       <!-- Camembert -->
+       <div class="card p-5">
+        <div class="flex items-center justify-between mb-4">
+         <div class="flex items-center gap-3">
+          <h3 class="font-semibold text-gray-700">Répartition par classe</h3><select id="pie-sample-select" class="p-1.5 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8 focus:ring-2 focus:ring-purple-300" onchange="updatePieChart()"> <option value="sampleA">Sample A</option> <option value="sampleB">Sample B</option> <option value="qc">QC</option> </select>
+         </div><button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-400"></i> </button>
+        </div>
+        <div class="flex items-center justify-center">
+         <svg id="pie-chart" width="240" height="240" viewbox="0 0 240 240">
+          <!-- Camembert interactif --> <g transform="translate(120, 120)">
+           <!-- PC - 28% -->
+           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 0 -100 A 100 100 0 0 1 95.11 -30.90 L 0 0 Z" fill="#D8B4F8" data-class="PC" data-value="28" /> <!-- PE - 22% -->
+           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 95.11 -30.90 A 100 100 0 0 1 80.90 58.78 L 0 0 Z" fill="#BFDBFE" data-class="PE" data-value="22" /> <!-- PS - 15% -->
+           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M 80.90 58.78 A 100 100 0 0 1 -30.90 95.11 L 0 0 Z" fill="#A7F3D0" data-class="PS" data-value="15" /> <!-- SM - 12% -->
+           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -30.90 95.11 A 100 100 0 0 1 -80.90 -58.78 L 0 0 Z" fill="#FBCFE8" data-class="SM" data-value="12" /> <!-- Cer - 10% -->
+           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -80.90 -58.78 A 100 100 0 0 1 -58.78 -80.90 L 0 0 Z" fill="#FED7AA" data-class="Cer" data-value="10" /> <!-- PI - 8% -->
+           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -58.78 -80.90 A 100 100 0 0 1 -30.90 -95.11 L 0 0 Z" fill="#F8BBD0" data-class="PI" data-value="8" /> <!-- Autres - 5% -->
+           <path class="pie-segment cursor-pointer hover:opacity-80 transition-opacity" d="M -30.90 -95.11 A 100 100 0 0 1 0 -100 L 0 0 Z" fill="#D1D5DB" data-class="Autres" data-value="5" />
+          </g> <!-- Centre blanc --> <circle cx="120" cy="120" r="50" fill="white" /> <text x="120" y="115" text-anchor="middle" class="text-sm font-medium fill-gray-500">
+           Total
+          </text> <text x="120" y="135" text-anchor="middle" class="text-lg font-bold fill-purple-400">
+           3000
+          </text> <text x="120" y="150" text-anchor="middle" class="text-xs fill-gray-400">
+           pmol
+          </text>
+         </svg>
+        </div>
+        <p class="text-xs text-gray-400 text-center mt-3 flex items-center justify-center gap-1"><i class="fas fa-filter text-purple-300"></i> Cliquez sur une part pour filtrer</p>
+       </div><!-- Tableau récapitulatif -->
+       <div class="card p-5">
+        <div class="flex items-center justify-between mb-4">
+         <h3 class="font-semibold text-gray-700">Résumé quantitatif</h3><button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Télécharger"> <i class="fas fa-download text-gray-400"></i> </button>
+        </div>
+        <div class="overflow-x-auto">
+         <table class="w-full">
+          <thead>
+           <tr class="border-b border-purple-100">
+            <th class="text-left py-3 px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Métrique</th>
+            <th class="text-center py-3 px-2 text-xs font-semibold text-purple-400 uppercase tracking-wider">Sample A</th>
+            <th class="text-center py-3 px-2 text-xs font-semibold text-blue-400 uppercase tracking-wider">Sample B</th>
+            <th class="text-center py-3 px-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider">QC</th>
+           </tr>
+          </thead>
+          <tbody class="divide-y divide-purple-50">
+           <tr class="hover:bg-purple-50 transition-colors">
+            <td class="py-3 px-2">
+             <div class="flex items-center gap-2">
+              <i class="fas fa-flask text-purple-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">Total lipides (pmol)</span>
+             </div></td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">3,000</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">3,300</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">4,400</td>
+           </tr>
+           <tr class="hover:bg-purple-50 transition-colors">
+            <td class="py-3 px-2">
+             <div class="flex items-center gap-2">
+              <i class="fas fa-list text-blue-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">Espèces détectées</span>
+             </div></td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">150</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">155</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">160</td>
+           </tr>
+           <tr class="hover:bg-purple-50 transition-colors">
+            <td class="py-3 px-2">
+             <div class="flex items-center gap-2">
+              <i class="fas fa-layer-group text-emerald-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">Classes identifiées</span>
+             </div></td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">12</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">13</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">14</td>
+           </tr>
+           <tr class="hover:bg-purple-50 transition-colors">
+            <td class="py-3 px-2">
+             <div class="flex items-center gap-2">
+              <i class="fas fa-percentage text-rose-300 text-sm"></i> <span class="text-sm font-medium text-gray-700">CV moyen (%)</span>
+             </div></td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">8.2</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">7.8</td>
+            <td class="text-center py-3 px-2 text-sm text-gray-700 font-semibold">5.4</td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+        <div class="mt-4 pt-4 border-t border-purple-100">
+         <div class="flex items-center gap-2 text-xs text-gray-500">
+          <i class="fas fa-info-circle"></i> <span>CV = Coefficient de variation. Valeurs QC utilisées pour le contrôle qualité.</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- TAB: Explorateur -->
+     <div id="tab-explorateur" class="tab-content">
+      <div class="flex items-center justify-between mb-6">
+       <div>
+        <h2 class="text-2xl font-bold text-gray-700">Explorateur interactif</h2>
+        <p class="text-sm text-gray-500 mt-1">Naviguez et filtrez vos données lipidiques</p>
+       </div>
+      </div>
+      <div class="grid grid-cols-3 gap-6">
+       <div class="col-span-2 card p-6">
+        <h3 class="font-semibold text-gray-700 mb-4">Scatter plot: PC vs PE</h3>
+        <svg width="100%" height="300" viewbox="0 0 400 300" style="background: linear-gradient(to bottom, rgba(232,213,242,0.3), rgba(168,216,234,0.3));"><defs>
+          <lineargradient id="scatterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+           <stop offset="0%" style="stop-color:#D8B4F8;stop-opacity:0.8" />
+           <stop offset="100%" style="stop-color:#BFDBFE;stop-opacity:0.8" />
+          </lineargradient>
+         </defs> <!-- Grid --> <line x1="50" y1="280" x2="350" y2="280" stroke="#E5E7EB" stroke-width="2" /> <line x1="50" y1="30" x2="50" y2="280" stroke="#E5E7EB" stroke-width="2" /> <!-- Points Sample A --> <circle cx="120" cy="200" r="4" fill="#D8B4F8" opacity="0.7" class="hover:brightness-150" /> <circle cx="150" cy="180" r="4" fill="#D8B4F8" opacity="0.7" /> <circle cx="180" cy="160" r="4" fill="#D8B4F8" opacity="0.7" /> <circle cx="200" cy="140" r="4" fill="#D8B4F8" opacity="0.7" /> <!-- Points Sample B --> <circle cx="140" cy="210" r="4" fill="#BFDBFE" opacity="0.7" /> <circle cx="170" cy="170" r="4" fill="#BFDBFE" opacity="0.7" /> <circle cx="210" cy="130" r="4" fill="#BFDBFE" opacity="0.7" /> <circle cx="250" cy="100" r="4" fill="#BFDBFE" opacity="0.7" /> <!-- Points QC --> <circle cx="160" cy="190" r="4" fill="#A7F3D0" opacity="0.7" /> <circle cx="190" cy="150" r="4" fill="#A7F3D0" opacity="0.7" /> <circle cx="230" cy="110" r="4" fill="#A7F3D0" opacity="0.7" /> <!-- Labels --> <text x="25" y="285" font-size="12" fill="#8B7B8B">
+          PC (mol%)
+         </text> <text x="300" y="310" font-size="12" fill="#8B7B8B">
+          PE (mol%)
+         </text>
+        </svg>
+        <div class="flex gap-4 mt-4">
+         <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full" style="background: #D8B4F8;"></div><span class="text-xs text-gray-600">Sample A (n=12)</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full" style="background: #BFDBFE;"></div><span class="text-xs text-gray-600">Sample B (n=12)</span>
+         </div>
+         <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full" style="background: #A7F3D0;"></div><span class="text-xs text-gray-600">QC (n=6)</span>
+         </div>
+        </div>
+       </div>
+       <div class="card p-6">
+        <h3 class="font-semibold text-gray-700 mb-4">Filtres rapides</h3>
+        <div class="space-y-4">
+         <div><label class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block">Classe lipidique</label> <select class="w-full p-2 text-sm border border-purple-200 rounded-lg bg-white appearance-none pr-8"> <option>PC</option> <option>PE</option> <option>PS</option> <option>SM</option> </select>
+         </div>
+         <div><label class="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block">Nombre de carbones</label> <input type="range" min="10" max="50" value="30" class="w-full">
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+           <span>10</span><span id="carbon-display">30</span><span>50</span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- TAB: Statistiques -->
+     <div id="tab-statistiques" class="tab-content">
+      <div class="flex items-center justify-between mb-6">
+       <div>
+        <h2 class="text-2xl font-bold text-gray-700">Analyse statistique</h2>
+        <p class="text-sm text-gray-500 mt-1">Comparaisons et tests statistiques</p>
+       </div>
+      </div>
+      <div class="grid grid-cols-2 gap-6">
+       <div class="card p-6">
+        <h3 class="font-semibold text-gray-700 mb-4">Box plot: Distribution des lipides</h3>
+        <svg width="100%" height="250" viewbox="0 0 300 250" style="background: rgba(232,213,242,0.2); border-radius: 12px;"><!-- Sample A box --> <rect x="40" y="80" width="50" height="100" fill="#D8B4F8" opacity="0.6" stroke="#D8B4F8" stroke-width="2" /> <line x1="40" y1="130" x2="90" y2="130" stroke="#6B5B7A" stroke-width="2" /> <!-- Sample B box --> <rect x="130" y="60" width="50" height="120" fill="#BFDBFE" opacity="0.6" stroke="#BFDBFE" stroke-width="2" /> <line x1="130" y1="120" x2="180" y2="120" stroke="#5B7BA0" stroke-width="2" /> <!-- QC box --> <rect x="220" y="90" width="50" height="90" fill="#A7F3D0" opacity="0.6" stroke="#A7F3D0" stroke-width="2" /> <line x1="220" y1="135" x2="270" y2="135" stroke="#5B7B6A" stroke-width="2" /> <!-- Labels --> <text x="55" y="230" font-size="12" fill="#666">
+          Sample A
+         </text> <text x="145" y="230" font-size="12" fill="#666">
+          Sample B
+         </text> <text x="235" y="230" font-size="12" fill="#666">
+          QC
+         </text>
+        </svg>
+       </div>
+       <div class="card p-6">
+        <h3 class="font-semibold text-gray-700 mb-4">Résultats des tests</h3>
+        <div class="space-y-3">
+         <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+          <p class="text-xs font-semibold text-blue-700">ANOVA - Lipides totaux</p>
+          <p class="text-sm text-blue-600">p-value: 0.0234 <span class="text-xs text-blue-500">*</span></p>
+         </div>
+         <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
+          <p class="text-xs font-semibold text-emerald-700">t-test (A vs B)</p>
+          <p class="text-sm text-emerald-600">p-value: 0.3421</p>
+         </div>
+         <div class="p-3 bg-purple-50 rounded-lg border border-purple-100">
+          <p class="text-xs font-semibold text-purple-700">Corrélation PC-PE</p>
+          <p class="text-sm text-purple-600">r = 0.892 <span class="text-xs text-purple-500">***</span></p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- TAB: Multivarié -->
+     <div id="tab-multivarie" class="tab-content">
+      <div class="flex items-center justify-between mb-6">
+       <div>
+        <h2 class="text-2xl font-bold text-gray-700">Analyse multivariée</h2>
+        <p class="text-sm text-gray-500 mt-1">PCA, PLS-DA et méthodes avancées</p>
+       </div>
+      </div>
+      <div class="card p-6">
+       <h3 class="font-semibold text-gray-700 mb-4">Score plot - PCA (PC1 vs PC2)</h3>
+       <svg width="100%" height="300" viewbox="0 0 400 300" style="background: linear-gradient(135deg, rgba(232,213,242,0.2), rgba(168,216,234,0.2)); border-radius: 12px;"><!-- Grid --> <line x1="50" y1="150" x2="350" y2="150" stroke="#DDD" stroke-width="1" stroke-dasharray="5" /> <line x1="200" y1="30" x2="200" y2="270" stroke="#DDD" stroke-width="1" stroke-dasharray="5" /> <!-- Sample A cluster --> <circle cx="120" cy="120" r="4" fill="#D8B4F8" opacity="0.8" /> <circle cx="130" cy="140" r="4" fill="#D8B4F8" opacity="0.8" /> <circle cx="110" cy="130" r="4" fill="#D8B4F8" opacity="0.8" /> <!-- Sample B cluster --> <circle cx="280" cy="180" r="4" fill="#BFDBFE" opacity="0.8" /> <circle cx="290" cy="200" r="4" fill="#BFDBFE" opacity="0.8" /> <circle cx="270" cy="190" r="4" fill="#BFDBFE" opacity="0.8" /> <!-- QC cluster --> <circle cx="200" cy="80" r="4" fill="#A7F3D0" opacity="0.8" /> <circle cx="210" cy="100" r="4" fill="#A7F3D0" opacity="0.8" /> <!-- Ellipses --> <ellipse cx="120" cy="130" rx="35" ry="25" fill="none" stroke="#D8B4F8" stroke-width="1" stroke-dasharray="3" opacity="0.5" /> <ellipse cx="280" cy="190" rx="35" ry="25" fill="none" stroke="#BFDBFE" stroke-width="1" stroke-dasharray="3" opacity="0.5" /> <ellipse cx="200" cy="90" rx="25" ry="20" fill="none" stroke="#A7F3D0" stroke-width="1" stroke-dasharray="3" opacity="0.5" /> <!-- Labels --> <text x="20" y="155" font-size="11" fill="#666">
+         PC2
+        </text> <text x="340" y="290" font-size="11" fill="#666">
+         PC1
+        </text>
+       </svg>
+       <p class="text-xs text-gray-500 mt-4">Variance expliquée: PC1 = 45.2%, PC2 = 28.7%</p>
+      </div>
+     </div><!-- TAB: Clustering -->
+     <div id="tab-clustering" class="tab-content">
+      <div class="flex items-center justify-between mb-6">
+       <div>
+        <h2 class="text-2xl font-bold text-gray-700">Analyse de clustering</h2>
+        <p class="text-sm text-gray-500 mt-1">Classification hiérarchique et k-means</p>
+       </div>
+      </div>
+      <div class="card p-6">
+       <h3 class="font-semibold text-gray-700 mb-4">Heatmap - Profils lipidiques</h3>
+       <div class="overflow-x-auto">
+        <table class="w-full text-center">
+         <thead>
+          <tr class="border-b border-purple-100">
+           <th class="py-2 px-2 text-xs font-semibold text-gray-600 text-left">Échantillon</th>
+           <th class="py-2 px-2 text-xs font-semibold text-gray-600">PC</th>
+           <th class="py-2 px-2 text-xs font-semibold text-gray-600">PE</th>
+           <th class="py-2 px-2 text-xs font-semibold text-gray-600">PS</th>
+           <th class="py-2 px-2 text-xs font-semibold text-gray-600">SM</th>
+           <th class="py-2 px-2 text-xs font-semibold text-gray-600">Cer</th>
+          </tr>
+         </thead>
+         <tbody class="divide-y divide-purple-50">
+          <tr>
+           <td class="py-3 px-2 text-sm font-medium text-gray-700 text-left">Sample A</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(216,180,248,0.9); color: white;">28%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(191,219,254,0.8); color: white;">22%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(167,243,208,0.6);">15%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(251,207,232,0.7);">12%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(254,215,170,0.6);">10%</td>
+          </tr>
+          <tr>
+           <td class="py-3 px-2 text-sm font-medium text-gray-700 text-left">Sample B</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(216,180,248,1); color: white;">32%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(191,219,254,0.7);">20%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(167,243,208,0.5);">14%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(251,207,232,0.8);">14%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(254,215,170,0.5);">8%</td>
+          </tr>
+          <tr>
+           <td class="py-3 px-2 text-sm font-medium text-gray-700 text-left">QC</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(216,180,248,0.85); color: white;">30%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(191,219,254,0.75);">21%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(167,243,208,0.6);">16%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(251,207,232,0.75);">13%</td>
+           <td class="py-3 px-2 text-sm" style="background: rgba(254,215,170,0.55);">9%</td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div><!-- Tooltip element -->
+  <div id="tooltip" class="tooltip hidden"></div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      dashboard_title: 'LipidoScope',
+      overview_title: 'Vue d\'ensemble des classes lipidiques',
+      primary_color: '#E8D5F2',
+      background_color: '#F3F4F6',
+      text_color: '#5A5A5A',
+      surface_color: '#FFFFFF',
+      accent_color: '#A8D8EA'
+    };
+    
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          document.getElementById('dashboard-title').textContent = config.dashboard_title || defaultConfig.dashboard_title;
+          document.getElementById('overview-title').textContent = config.overview_title || defaultConfig.overview_title;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => window.elementSdk.setConfig({ primary_color: value })
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => window.elementSdk.setConfig({ accent_color: value })
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['dashboard_title', config.dashboard_title || defaultConfig.dashboard_title],
+          ['overview_title', config.overview_title || defaultConfig.overview_title],
+          ['primary_color', config.primary_color || defaultConfig.primary_color],
+          ['accent_color', config.accent_color || defaultConfig.accent_color]
+        ])
+      });
+    }
+    
+    // Accordion functionality
+    function toggleAccordion(button) {
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('.accordion-icon');
+      
+      content.classList.toggle('open');
+      icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+    
+    // Tab switching functionality
+    function switchTab(tabName, event) {
+      event.preventDefault();
+      
+      // Hide all tab contents
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
+      
+      // Remove active class from all buttons
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('tab-active'));
+      
+      // Show selected tab content
+      const selectedTab = document.getElementById(`tab-${tabName}`);
+      if (selectedTab) {
+        selectedTab.classList.add('active');
+      }
+      
+      // Add active class to clicked button
+      event.target.closest('.tab-btn').classList.add('tab-active');
+    }
+    // Range slider display update
+    function updateRangeDisplay(type) {
+      const minEl = document.getElementById(`${type}-min`);
+      const maxEl = document.getElementById(`${type}-max`);
+      const displayEl = document.getElementById(`${type}-value`);
+      
+      let min = parseInt(minEl.value);
+      let max = parseInt(maxEl.value);
+      
+      if (min > max) {
+        [min, max] = [max, min];
+      }
+      
+      displayEl.textContent = `${min} - ${max}`;
+    }
+    
+    // Dynamic class update based on category
+    function updateClasses() {
+      const category = document.getElementById('category-select').value;
+      const classSelect = document.getElementById('class-select');
+      
+      const classOptions = {
+        all: ['Toutes les classes', 'PC', 'PE', 'PS', 'PI', 'DG', 'TG', 'Cer', 'SM'],
+        glycerolipids: ['Toutes les classes', 'DG', 'TG', 'MG'],
+        glycerophospholipids: ['Toutes les classes', 'PC', 'PE', 'PS', 'PI', 'PG', 'PA'],
+        sphingolipids: ['Toutes les classes', 'Cer', 'SM', 'GlcCer', 'LacCer'],
+        sterol: ['Toutes les classes', 'CE', 'Chol'],
+        fatty: ['Toutes les classes', 'FA', 'FAHFA']
+      };
+      
+      const options = classOptions[category] || classOptions.all;
+      classSelect.innerHTML = options.map(opt => `<option>${opt}</option>`).join('');
+    }
+    
+    // Tooltip functionality
+    const tooltip = document.getElementById('tooltip');
+    
+    // Bar chart tooltips
+    document.querySelectorAll('.bar-segment').forEach(segment => {
+      segment.addEventListener('mouseenter', function(e) {
+        const sample = this.parentElement.dataset.sample;
+        const lipidClass = this.dataset.class;
+        const value = this.dataset.value;
+        
+        tooltip.innerHTML = `<strong>${sample}</strong><br>${lipidClass}: ${value}%`;
+        tooltip.classList.remove('hidden');
+        
+        const rect = this.getBoundingClientRect();
+        tooltip.style.left = rect.left + rect.width / 2 + 'px';
+        tooltip.style.top = rect.top + 'px';
+      });
+      
+      segment.addEventListener('mouseleave', function() {
+        tooltip.classList.add('hidden');
+      });
+    });
+    
+    // Pie chart tooltips
+    document.querySelectorAll('.pie-segment').forEach(segment => {
+      segment.addEventListener('mouseenter', function(e) {
+        const lipidClass = this.dataset.class;
+        const value = this.dataset.value;
+        
+        tooltip.innerHTML = `<strong>${lipidClass}</strong>: ${value}%`;
+        tooltip.classList.remove('hidden');
+        
+        const rect = this.getBoundingClientRect();
+        tooltip.style.left = rect.left + rect.width / 2 + 'px';
+        tooltip.style.top = rect.top + 'px';
+      });
+      
+      segment.addEventListener('mouseleave', function() {
+        tooltip.classList.add('hidden');
+      });
+      
+      // Click to filter
+      segment.addEventListener('click', function() {
+        const lipidClass = this.dataset.class;
+        const classSelect = document.getElementById('class-select');
+        
+        // Find and select the class
+        for (let option of classSelect.options) {
+          if (option.text === lipidClass) {
+            classSelect.value = option.value;
+            break;
+          }
+        }
+        
+        // Visual feedback
+        this.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 200);
+      });
+    });
+    
+    // Pie chart data for different samples
+    const pieData = {
+      sampleA: { PC: 28, PE: 22, PS: 15, SM: 12, Cer: 10, PI: 8, Autres: 5, total: 3000 },
+      sampleB: { PC: 32, PE: 20, PS: 14, SM: 14, Cer: 8, PI: 7, Autres: 5, total: 3300 },
+      qc: { PC: 30, PE: 21, PS: 16, SM: 13, Cer: 9, PI: 7, Autres: 4, total: 4400 }
+    };
+    
+    function updatePieChart() {
+      const sample = document.getElementById('pie-sample-select').value;
+      const data = pieData[sample];
+      
+      // Update center text
+      const svg = document.getElementById('pie-chart');
+      const texts = svg.querySelectorAll('text');
+      texts[1].textContent = data.total.toLocaleString();
+      
+      // Update segment values
+      const segments = svg.querySelectorAll('.pie-segment');
+      const classes = ['PC', 'PE', 'PS', 'SM', 'Cer', 'PI', 'Autres'];
+      segments.forEach((seg, i) => {
+        if (classes[i]) {
+          seg.dataset.value = data[classes[i]];
+        }
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d30d44a35c0009c',t:'MTc3MTk1NTY3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
